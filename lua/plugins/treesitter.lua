@@ -1,0 +1,56 @@
+return {
+  {
+    "nvim-treesitter/nvim-treesitter",
+    opts = {
+      ensure_installed = {
+        "c_sharp",
+        "typescript",
+        "javascript",
+        "tsx",
+        "json",
+        "jsonc",
+        "lua",
+        "html",
+        "css",
+        "markdown",
+        "markdown_inline",
+        "bash",
+        "regex",
+        "vim",
+        "vimdoc",
+      },
+      highlight = {
+        enable = true,
+      },
+      indent = {
+        enable = true,
+      },
+      textobjects = {
+        select = {
+          enable = true,
+          lookahead = true,
+          keymaps = {
+            ["af"] = "@function.outer",
+            ["if"] = "@function.inner",
+            ["ac"] = "@class.outer",
+            ["ic"] = "@class.inner",
+            ["aa"] = "@parameter.outer",
+            ["ia"] = "@parameter.inner",
+          },
+        },
+        move = {
+          enable = true,
+          set_jumps = true,
+          goto_next_start = {
+            ["]f"] = "@function.outer",
+            ["]c"] = "@class.outer",
+          },
+          goto_previous_start = {
+            ["[f"] = "@function.outer",
+            ["[c"] = "@class.outer",
+          },
+        },
+      },
+    },
+  },
+}
