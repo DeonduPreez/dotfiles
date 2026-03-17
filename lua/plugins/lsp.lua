@@ -32,11 +32,8 @@ return {
               -- We select then from the project root, which is identified by the presence of a package
               -- manager lock file.
               local root_markers = { 'package-lock.json', 'yarn.lock', 'pnpm-lock.yaml', 'bun.lockb', 'bun.lock' }
-              -- Give the root markers equal priority by wrapping them in a table
-              root_markers = vim.fn.has('nvim-0.11.3') == 1 and { root_markers, { '.git' } }
-                or vim.list_extend(root_markers, { '.git' })
-              -- exclude deno
 
+              -- if no project_root exists, this isn't even a ts project.
               local path = vim.api.nvim_buf_get_name(bufnr)
               local project_root = vim.fs.root(path, root_markers)
               if project_root == nil then
