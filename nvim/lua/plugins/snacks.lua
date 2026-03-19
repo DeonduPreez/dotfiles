@@ -6,6 +6,7 @@ return {
 	},
 	keys = {
 		{ "<leader>E", false },
+		{ "<leader>fe", false },
 		{ "<leader>fE", false },
 	},
 }
