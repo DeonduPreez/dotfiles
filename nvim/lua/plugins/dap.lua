@@ -135,9 +135,31 @@ return {
 					name = "Launch (Debug)",
 					request = "launch",
 					program = function()
-						-- TODO : Parse the launchSettings.json
-						vim.env.ASPNETCORE_ENVIRONMENT = "Development"
-						return dotnet_helper.build_dll_path("Debug")
+						-- TODO : Parse the launchSettings.json and build a config for each profile
+						local configuration = "Debug"
+						local corenet_env = "Development"
+						local project_setup = dotnet_helper.get_dotnet_project_setup(configuration)
+
+						if not project_setup then
+							return nil
+						end
+
+						local build_error = dotnet_helper.build_project(configuration, project_setup)
+						if build_error then
+							vim.notify("Build FAILED:\n" .. build_error, vim.log.levels.ERROR)
+							return nil
+						end
+
+						vim.notify("Build Succeeded.", vim.log.levels.DEBUG)
+
+						-- Set the working directory to the highest_net_folder so we execute in that directory
+						vim.fn.chdir(project_setup.dll_root_dir)
+
+						-- TODO : We are keeping track of the old working directory and return to it when done with current debugging session.
+						-- Could get complex when running multiple configs at the same time. At that point, just disable the cwd change maybe?
+						vim.env.ASPNETCORE_ENVIRONMENT = corenet_env
+
+						return project_setup.dll_path
 					end,
 				},
 				{
@@ -145,9 +167,31 @@ return {
 					name = "Launch (Release)",
 					request = "launch",
 					program = function()
-						-- TODO : Parse the launchSettings.json
-						vim.env.ASPNETCORE_ENVIRONMENT = "Production"
-						return dotnet_helper.build_dll_path("Release")
+						-- TODO : Parse the launchSettings.json and build a config for each profile
+						local configuration = "Release"
+						local corenet_env = "Production"
+						local project_setup = dotnet_helper.get_dotnet_project_setup(configuration)
+
+						if not project_setup then
+							return nil
+						end
+
+						local build_error = dotnet_helper.build_project(configuration, project_setup)
+						if build_error then
+							vim.notify("Build FAILED:\n" .. build_error, vim.log.levels.ERROR)
+							return nil
+						end
+
+						vim.notify("Build Succeeded.", vim.log.levels.DEBUG)
+
+						-- Set the working directory to the highest_net_folder so we execute in that directory
+						vim.fn.chdir(project_setup.dll_root_dir)
+
+						-- TODO : We are keeping track of the old working directory and return to it when done with current debugging session.
+						-- Could get complex when running multiple configs at the same time. At that point, just disable the cwd change maybe?
+						vim.env.ASPNETCORE_ENVIRONMENT = corenet_env
+
+						return project_setup.dll_path
 					end,
 				},
 				{
