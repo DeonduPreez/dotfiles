@@ -5,6 +5,7 @@ function M.find_project_root_by_csproj(start_path)
 	local Path = require("plenary.path")
 	local path = Path:new(start_path)
 
+	-- TODO : Whe should take in the current file and the current working directory then check if there's a way to see which csproj that .cs file belongs to.
 	while true do
 		local csproj_files = vim.fn.glob(path:absolute() .. "/*.csproj", false, true)
 		if #csproj_files > 0 then
@@ -26,6 +27,7 @@ function M.get_highest_net_folder(bin_debug_path)
 
 	if dirs == 0 then
 		error("No netX.Y folders found in " .. bin_debug_path)
+		return nil
 	end
 
 	table.sort(dirs, function(a, b) -- Sort the directories based on their version numbers
@@ -44,21 +46,21 @@ end
 -- local launch_settings_path = launch_settings_root_dir .. "/launchSettings.json"
 -- end
 
-function M.get_dotnet_project_setup(configuration)
-	-- Get the current "working" file and current working directory
-	local cwf = vim.api.nvim_buf_get_name(0):gsub("\\", "/")
-	local result = { cwf = cwf, cwd = vim.fn.fnamemodify(cwf, ":p:h") }
-
+function M.get_dotnet_project_setup(cwf, cwd, configuration)
 	-- Start from the cwd and work up until you find the root of the csproj
-	local csproj_root_details = M.find_project_root_by_csproj(result.cwd)
+	local csproj_root_details = M.find_project_root_by_csproj(cwd)
 	if not csproj_root_details then
-		vim.notify("Unable to find project_root from " .. result.cwd, vim.log.levels.ERROR)
+		vim.notify("Unable to find project_root from " .. cwd, vim.log.levels.ERROR)
 		return nil
 	end
 
+	local result = { cwf = cwf, cwd = cwd }
+
 	result.csproj_root_dir = csproj_root_details.csproj_root_dir
 	result.csproj_path = csproj_root_details.csproj_path
+	-- TODO : Check if there is a property in the csproj to set the project name? Idk if that exists
 	result.project_name = vim.fn.fnamemodify(result.csproj_path, ":t:r")
+	-- TODO : Check if there's an output directory in csproj files.
 	result.bin_root_dir = csproj_root_details.csproj_root_dir .. "/bin/" .. configuration
 	result.dll_root_dir = M.get_highest_net_folder(result.bin_root_dir)
 	if not result.dll_root_dir then
@@ -73,12 +75,18 @@ end
 -- Builds the csproj file. Only returns build errors, otherwise nil.
 function M.build_project(configuration, project_setup)
 	-- Set the working directory to the root of the project so we build in that directory
+	local cwd = vim.fn.getcwd()
 	vim.fn.chdir(project_setup.csproj_root_dir)
 
 	-- Run dotnet build synchronously (blocks until done)
 	vim.notify("Building " .. project_setup.project_name .. " (" .. configuration .. ")...", vim.log.levels.INFO)
 	local result =
 		vim.fn.system("dotnet build -c " .. configuration .. " " .. vim.fn.shellescape(project_setup.csproj_path))
+
+	-- Set the working directory back to the previous working directory
+
+	vim.fn.chdir(cwd)
+
 	local exit_code = vim.v.shell_error
 
 	if exit_code ~= 0 then
