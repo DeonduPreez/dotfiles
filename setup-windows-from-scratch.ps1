@@ -70,5 +70,5 @@ if (-not $isAdmin)
 }
 
 # Create symlinks
-New-Symlink -SubDirectory "nvim" -Target "$env:LOCALAPPDATA\nvim"
+New-Symlink -SubDirectory "nvim-from-scratch" -Target "$env:LOCALAPPDATA\nvim"
 New-Symlink -SubDirectory "wezterm" -Target "$env:USERPROFILE\.config\wezterm"
