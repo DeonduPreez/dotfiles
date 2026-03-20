@@ -22,9 +22,18 @@ config.keys = {
 		mods = "CTRL|SHIFT",
 		action = wezterm.action.DisableDefaultAssignment,
 	},
+	{
+		key = "l",
+		mods = "CTRL|SHIFT|ALT",
+		action = wezterm.action.ActivateTabRelative(1),
+	},
+	{
+		key = "h",
+		mods = "CTRL|SHIFT|ALT",
+		action = wezterm.action.ActivateTabRelative(-1),
+	},
 }
 
 config.default_prog = { "powershell.exe", "-NoLogo" }
 
 return config
-
