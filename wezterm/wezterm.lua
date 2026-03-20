@@ -1,6 +1,17 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
+wezterm.on("user-var-changed", function(window, pane, name, value)
+	if name == "NVIM_DEBUG_TITLE" then
+		local overrides = window:get_config_overrides() or {}
+		overrides.tab_bar_style = overrides.tab_bar_style or {}
+		window:set_config_overrides(overrides)
+
+		local tab = window:active_tab()
+		tab:set_title(value)
+	end
+end)
+
 config.keys = {
 	{
 		key = "v",
@@ -17,11 +28,11 @@ config.keys = {
 		mods = "CTRL|SHIFT",
 		action = wezterm.action.DisableDefaultAssignment,
 	},
-	{
-		key = "l",
-		mods = "CTRL|SHIFT",
-		action = wezterm.action.DisableDefaultAssignment,
-	},
+	-- {
+	-- key = "l",
+	-- mods = "CTRL|SHIFT",
+	-- action = wezterm.action.DisableDefaultAssignment,
+	-- },
 	{
 		key = "l",
 		mods = "CTRL|SHIFT|ALT",
