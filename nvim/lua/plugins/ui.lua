@@ -454,6 +454,10 @@ return {
 			-- rendering, which gives them the same floating UI treatment
 			-- as the cmdline. Requires treesitter for markdown highlighting.
 			lsp = {
+				signature = {
+					-- TODO : Fix this when we get to Phase 5 - LSP setup
+					enabled = false,
+				},
 				override = {
 					-- Replace the default LSP markdown renderer with noice's.
 					-- This gives hover docs and signature help a cleaner look
