@@ -45,6 +45,7 @@ config.keys = {
 	},
 }
 
-config.default_prog = { "powershell.exe", "-NoLogo" }
+config.default_prog = { "wsl.exe", "--distribution", "Ubuntu-24.04" }
+config.enable_kitty_keyboard = true
 
 return config

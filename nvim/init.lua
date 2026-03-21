@@ -1,5 +1,7 @@
 -- Set noshellshash
 vim.opt.shellslash = false
+vim.g.python3_host_prog = "C:/Users/Deond/scoop/apps/python/current/python.exe"
+vim.g.node_host_prog = "C:/Program Files/nodejs/node_modules/neovim/bin/cli.js"
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
