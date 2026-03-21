@@ -55,12 +55,9 @@ config.enable_kitty_keyboard = true
 -- Disabling truncation of tab titles
 config.tab_max_width = 9999
 
--- ─────────────────────────────────────────────────────────────────────────────
--- Glass / Transparency Effect (Windows only)
--- ─────────────────────────────────────────────────────────────────────────────
-
--- ── Tab Bar: Transparent (Retro Style) ───────────────────────────────────────
-config.use_fancy_tab_bar = false
+-- ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+-- Dark tokyo night blue-white tabs (Supports transparency if they fix the issues with auto sizing in fancy tab mode)
+-- ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
 config.colors = {
 	tab_bar = {
@@ -92,6 +89,10 @@ config.colors = {
 		},
 	},
 }
+
+-- ─────────────────────────────────────────────────────────────────────────────
+-- Glass / Transparency Effect (Windows only)
+-- ─────────────────────────────────────────────────────────────────────────────
 
 -- ── Editor: Transparent ───────────────────────────────────────
 -- Docs: https://wezterm.org/config/lua/config/win32_system_backdrop.html
