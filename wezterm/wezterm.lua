@@ -1,6 +1,10 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
+config.font =
+	wezterm.font("JetBrainsMono Nerd Font Mono", { weight = "DemiBold", stretch = "Normal", style = "Normal" })
+config.font_size = 13.0
+
 wezterm.on("user-var-changed", function(window, pane, name, value)
 	if name == "NVIM_DEBUG_TITLE" then
 		local overrides = window:get_config_overrides() or {}
