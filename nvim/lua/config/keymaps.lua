@@ -76,8 +76,26 @@ map("v", ">", ">gv", { desc = "Indent and re-select" })
 -- ── which-key (plugins/editor.lua) ──────────────────────────
 -- <leader>?     → Show buffer-local keymaps
 
--- ── [Phase 2] Buffers (<leader>b) ───────────────────────────
--- (bufferline keymaps will go here)
+-- ── [Phase 2] Buffers (<leader>b) — plugins/ui.lua ──────────
+-- Shift+H       → Prev buffer (BufferLineCyclePrev)
+-- Shift+L       → Next buffer (BufferLineCycleNext)
+-- <leader>bh    → Move buffer left (reorder)
+-- <leader>bl    → Move buffer right (reorder)
+-- <leader>bp    → Pick buffer by letter overlay
+-- <leader>bd    → Delete (close) current buffer
+-- <leader>bo    → Close all other buffers
+-- <leader>bH    → Close all buffers to the left
+-- <leader>bL    → Close all buffers to the right
+-- <leader>b1-5  → Jump to buffer by ordinal position
+
+-- ── [Phase 2] Notifications (<leader>n) — plugins/ui.lua ────
+-- <leader>nl    → Show last notification message (noice)
+-- <leader>nh    → Show notification history (noice)
+-- <leader>na    → Show all messages (noice)
+-- <leader>nd    → Dismiss all visible notifications (noice)
+-- <S-Enter>     → Redirect cmdline output to popup (noice, cmdline mode)
+-- <C-f>         → Scroll forward in LSP hover/signature (noice, i/n/s modes)
+-- <C-b>         → Scroll backward in LSP hover/signature (noice, i/n/s modes)
 
 -- ── [Phase 3] Find/Search (<leader>f) ───────────────────────
 -- (telescope keymaps will go here)
