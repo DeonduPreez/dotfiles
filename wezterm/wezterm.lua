@@ -88,23 +88,18 @@ config.colors = {
 		background = "rgba(0, 0, 0, 0)",
 
 		active_tab = {
-			-- "none" = fully transparent, lets backdrop show through
-			-- Or use a subtle tint: "rgba(255, 255, 255, 0.10)" for a frosted pill look
-			bg_color = "rgba(255, 255, 255, 0.10)",
-			fg_color = "#ffffff",
-			italic = false,
+			bg_color = "rgba(15, 20, 40, 0.75)", -- Dark Heavy Background
+			fg_color = "#c0caf5", -- tokyo night blue-white
 		},
 
 		inactive_tab = {
-			bg_color = "rgba(0, 0, 0, 0)",
-			fg_color = "rgba(255, 255, 255, 0.45)",
-			italic = false,
+			bg_color = "rgba(0, 0, 0, 0)", -- Fully transparent because it's in the background
+			fg_color = "#c0caf5", -- tokyo night blue-white
 		},
 
 		inactive_tab_hover = {
 			bg_color = "rgba(255, 255, 255, 0.06)",
 			fg_color = "rgba(255, 255, 255, 0.75)",
-			italic = false,
 		},
 
 		new_tab = {
