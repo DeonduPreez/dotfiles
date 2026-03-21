@@ -16,6 +16,39 @@ wezterm.on("user-var-changed", function(window, pane, name, value)
 	end
 end)
 
+-- ── Tab title truncation ──────────────────────────────────────────────────────
+-- Docs: https://wezterm.org/config/lua/window-events/format-tab-title.html
+--
+-- WezTerm calls this event for every tab whenever tab widths need recomputing.
+-- The `max_width` parameter is the number of cells WezTerm has decided this
+-- tab can use. Without this handler, the default renderer doesn't truncate —
+-- it just lets the text overflow behind the close button.
+--
+-- We subtract 4 from max_width as a margin:
+--   - 1 cell for the leading space
+--   - 1 cell for the trailing space
+--   - 2 cells reserved for the close button (the X) on the right
+-- Without that buffer, the title still clips right up to the edge.
+wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+	-- Prefer an explicitly set title (e.g. from your NVIM_DEBUG_TITLE handler),
+	-- fall back to the active pane's title.
+	local title = tab.tab_title
+	if not title or #title == 0 then
+		title = tab.active_pane.title
+	end
+
+	-- Truncate to fit, adding an ellipsis so the user knows text was cut.
+	-- wezterm.truncate_right measures in cells (handles wide chars correctly).
+	local max = max_width - 4
+	if wezterm.column_width(title) > max then
+		title = wezterm.truncate_right(title, max - 1)
+	end
+
+	-- Return a plain string — WezTerm will apply your colors.tab_bar styles
+	-- on top of it, so you don't need to re-specify colors here.
+	return " " .. title
+end)
+
 config.keys = {
 	{
 		key = "v",
