@@ -16,39 +16,6 @@ wezterm.on("user-var-changed", function(window, pane, name, value)
 	end
 end)
 
--- ── Tab title truncation ──────────────────────────────────────────────────────
--- Docs: https://wezterm.org/config/lua/window-events/format-tab-title.html
---
--- WezTerm calls this event for every tab whenever tab widths need recomputing.
--- The `max_width` parameter is the number of cells WezTerm has decided this
--- tab can use. Without this handler, the default renderer doesn't truncate —
--- it just lets the text overflow behind the close button.
---
--- We subtract 4 from max_width as a margin:
---   - 1 cell for the leading space
---   - 1 cell for the trailing space
---   - 2 cells reserved for the close button (the X) on the right
--- Without that buffer, the title still clips right up to the edge.
-wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
-	-- Prefer an explicitly set title (e.g. from your NVIM_DEBUG_TITLE handler),
-	-- fall back to the active pane's title.
-	local title = tab.tab_title
-	if not title or #title == 0 then
-		title = tab.active_pane.title
-	end
-
-	-- Truncate to fit, adding an ellipsis so the user knows text was cut.
-	-- wezterm.truncate_right measures in cells (handles wide chars correctly).
-	local max = max_width - 4
-	if wezterm.column_width(title) > max then
-		title = wezterm.truncate_right(title, max - 1)
-	end
-
-	-- Return a plain string — WezTerm will apply your colors.tab_bar styles
-	-- on top of it, so you don't need to re-specify colors here.
-	return " " .. title
-end)
-
 config.keys = {
 	{
 		key = "v",
@@ -85,39 +52,18 @@ config.keys = {
 config.default_prog = { "wsl.exe", "--distribution", "Ubuntu-24.04" }
 config.enable_kitty_keyboard = true
 
+-- Disabling truncation of tab titles
+config.tab_max_width = 9999
+
 -- ─────────────────────────────────────────────────────────────────────────────
 -- Glass / Transparency Effect (Windows only)
 -- ─────────────────────────────────────────────────────────────────────────────
 
--- ── Tab Bar: Transparent (Fancy Style) ───────────────────────────────────────
--- Docs: https://wezterm.org/config/lua/config/window_frame.html
--- Docs: https://wezterm.org/config/lua/config/colors.html
-config.use_fancy_tab_bar = true
+-- ── Tab Bar: Transparent (Retro Style) ───────────────────────────────────────
+config.use_fancy_tab_bar = false
 
--- The "frame" is the titlebar strip that the tabs sit inside.
--- Setting these to "none" makes them transparent so the backdrop shows through.
--- Without this, you get a solid bar above/around your tabs regardless of
--- what you set in colors.tab_bar.
-config.window_frame = {
-	active_titlebar_bg = "none",
-	inactive_titlebar_bg = "none",
-
-	-- Keep a subtle bottom border as a visual separator between tab bar and content
-	border_bottom_height = "1px",
-	border_bottom_color = "rgba(255, 255, 255, 0.08)",
-	border_left_width = "0px",
-	border_right_width = "0px",
-	border_top_height = "0px",
-
-	-- Font for tab labels
-	font = wezterm.font("JetBrainsMono Nerd Font"),
-	font_size = 10.0,
-}
-
--- Individual tab + tab bar background colors
 config.colors = {
 	tab_bar = {
-		-- The empty space in the tab bar not occupied by a tab
 		background = "rgba(0, 0, 0, 0)",
 
 		active_tab = {
@@ -131,8 +77,8 @@ config.colors = {
 		},
 
 		inactive_tab_hover = {
-			bg_color = "rgba(255, 255, 255, 0.06)",
-			fg_color = "rgba(255, 255, 255, 0.75)",
+			bg_color = "rgba(255, 255, 255, 0.07)",
+			fg_color = "#ffffff",
 		},
 
 		new_tab = {
@@ -141,7 +87,7 @@ config.colors = {
 		},
 
 		new_tab_hover = {
-			bg_color = "rgba(255, 255, 255, 0.06)",
+			bg_color = "rgba(255, 255, 255, 0.07)",
 			fg_color = "#ffffff",
 		},
 	},
