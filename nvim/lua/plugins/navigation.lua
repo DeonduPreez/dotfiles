@@ -180,7 +180,7 @@ return {
 				-- Don't bind neo-tree to Neovim's `:cd` (current working directory).
 				-- When false, neo-tree maintains its own root independent of pwd.
 				-- This is safer for multi-project workflows.
-				bind_to_cwd = false,
+				bind_to_cwd = true,
 
 				-- Auto-reveal the current file in the tree as you switch buffers.
 				-- This is the JetBrains "always select open file" behavior.
@@ -244,6 +244,296 @@ return {
 					vim.cmd("Neotree show")
 				end,
 			})
+		end,
+	},
+
+	-- ┌──────────────────────────────────────────────────────────┐
+	-- │  telescope.nvim                                          │
+	-- │  Repo: https://github.com/nvim-telescope/telescope.nvim  │
+	-- │  Docs: :h telescope.nvim                                 │
+	-- │  The Swiss Army knife fuzzy finder. Find files, grep      │
+	-- │  text, browse buffers, search help tags, and much more.   │
+	-- │                                                           │
+	-- │  Requirements (already installed per your setup):          │
+	-- │  - ripgrep: used by live_grep and grep_string             │
+	-- │  - fd: used as an alternative to `find` for find_files    │
+	-- │  - fzf-native: C-compiled sorter for much faster fuzzy    │
+	-- │    matching (see telescope-fzf-native below)              │
+	-- │                                                           │
+	-- │  Dependencies:                                            │
+	-- │  - plenary.nvim (required): async utilities               │
+	-- └──────────────────────────────────────────────────────────┘
+	{
+		"nvim-telescope/telescope.nvim",
+
+		-- Use latest stable. Telescope has only made one release tag,
+		-- so we track HEAD (main branch) which is the recommended approach.
+		-- See: https://github.com/nvim-telescope/telescope.nvim#installation
+		version = false,
+
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+
+			-- telescope-fzf-native: compiled C sorter that replaces the
+			-- default Lua sorter. Makes fuzzy matching significantly faster,
+			-- especially in large projects. Requires `make` to build.
+			{
+				"nvim-telescope/telescope-fzf-native.nvim",
+				build = "make",
+			},
+		},
+
+		-- Lazy-load on the :Telescope command. This means telescope's Lua
+		-- modules aren't loaded until you actually invoke a picker.
+		cmd = "Telescope",
+
+		-- ── Keymaps ──────────────────────────────────────────
+		-- Documented in keymaps.lua under "Find/Search (<leader>f)".
+		-- Each keymap triggers lazy-loading of telescope.
+		keys = {
+			-- ── Files ────────────────────────────────────────
+			-- Find files by name. Uses fd (installed) for fast file discovery,
+			-- respects .gitignore by default.
+			{
+				"<leader><space>",
+				function()
+					require("telescope.builtin").find_files()
+				end,
+				desc = "Find files",
+			},
+
+			-- Find recently opened files. Useful for jumping back to something
+			-- you were working on.
+			{
+				"<leader>fr",
+				function()
+					require("telescope.builtin").oldfiles()
+				end,
+				desc = "Recent files",
+			},
+
+			-- ── Text Search ──────────────────────────────────
+			-- Live grep: type a pattern and see real-time results across the
+			-- entire project. This is the Ctrl+Shift+F equivalent from Rider.
+			-- Uses ripgrep under the hood.
+			{
+				"<leader>fg",
+				function()
+					require("telescope.builtin").live_grep()
+				end,
+				desc = "Live grep (project)",
+			},
+
+			-- Search for the word currently under the cursor across the project.
+			-- Like Rider's "Find Usages" but broader (plain text, not semantic).
+			{
+				"<leader>fw",
+				function()
+					require("telescope.builtin").grep_string()
+				end,
+				desc = "Grep word under cursor",
+			},
+
+			-- ── Buffers ──────────────────────────────────────
+			-- Fuzzy-find across open buffers. Faster than cycling with Shift+H/L
+			-- when you have many buffers open.
+			{
+				"<leader>fb",
+				function()
+					require("telescope.builtin").buffers({
+						sort_mru = true, -- most recently used first
+						ignore_current_buffer = false, -- Include the current buffer
+					})
+				end,
+				desc = "Find buffers",
+			},
+
+			-- ── Help / Meta ──────────────────────────────────
+			-- Search through Neovim help tags. Incredible for learning vim — type
+			-- a concept and jump straight to the relevant help page.
+			{
+				"<leader>fh",
+				function()
+					require("telescope.builtin").help_tags()
+				end,
+				desc = "Help tags",
+			},
+
+			-- Search through all available keymaps (from plugins, your config, etc.).
+			-- Complements which-key by letting you fuzzy-search bindings.
+			{
+				"<leader>fk",
+				function()
+					require("telescope.builtin").keymaps()
+				end,
+				desc = "Keymaps",
+			},
+
+			-- Search through Neovim command history.
+			{
+				"<leader>fc",
+				function()
+					require("telescope.builtin").command_history()
+				end,
+				desc = "Command history",
+			},
+
+			-- Search through diagnostic messages (errors, warnings).
+			-- This will become much more useful once LSP is set up in Phase 5.
+			{
+				"<leader>fd",
+				function()
+					require("telescope.builtin").diagnostics()
+				end,
+				desc = "Diagnostics",
+			},
+
+			-- Resume the last telescope picker with its previous state.
+			-- Extremely useful when you accidentally close a picker.
+			{
+				"<leader>f.",
+				function()
+					require("telescope.builtin").resume()
+				end,
+				desc = "Resume last picker",
+			},
+
+			-- Fuzzy-find in the current buffer (like Ctrl+F in an editor
+			-- but with fuzzy matching and a preview).
+			{
+				"<leader>/",
+				function()
+					require("telescope.builtin").current_buffer_fuzzy_find()
+				end,
+				desc = "Fuzzy search in buffer",
+			},
+		},
+
+		config = function(_, opts)
+			local telescope = require("telescope")
+			local actions = require("telescope.actions")
+
+			-- Merge any opts passed from lazy.nvim with our config function.
+			-- We use config (not just opts) because we need to call
+			-- load_extension() after setup, which requires imperative code.
+			telescope.setup(vim.tbl_deep_extend("force", opts or {}, {
+				defaults = {
+					-- ── Layout ───────────────────────────────
+					-- "horizontal" puts the preview on the right (like VS Code search).
+					-- Other options: "vertical" (preview below), "flex" (auto-switch).
+					layout_strategy = "horizontal",
+
+					layout_config = {
+						horizontal = {
+							-- Preview takes 55% of the window width.
+							preview_width = 0.55,
+							-- Don't show preview if the window is narrower than this.
+							preview_cutoff = 120,
+						},
+						-- Use 80% of the screen width and 80% of the height.
+						width = 0.80,
+						height = 0.80,
+					},
+
+					-- ── Behavior ─────────────────────────────
+					-- Start in insert mode (ready to type immediately).
+					-- This is the expected behavior for a fuzzy finder.
+					prompt_prefix = "   ",
+					selection_caret = "  ",
+
+					-- What to do when results overflow: `cycle` wraps from bottom to top.
+					scroll_strategy = "cycle",
+
+					-- How paths are displayed in results. "smart" truncates long paths
+					-- intelligently, showing the most relevant parts.
+					path_display = { "smart" },
+
+					-- ── Sorting ──────────────────────────────
+					-- fzf-native will be set as the sorter via the extension below.
+					-- This gives us much faster fuzzy matching.
+					sorting_strategy = "ascending",
+
+					-- Put the prompt (input line) at the top. Combined with
+					-- ascending sorting, results appear below the prompt and
+					-- grow downward. This is the modern convention.
+					-- (Matches VS Code, fzf, and other modern fuzzy finders.)
+
+					-- ── File Ignore ──────────────────────────
+					-- Patterns to exclude from find_files results.
+					-- These are passed to the underlying file finder (fd/ripgrep).
+					file_ignore_patterns = {
+						"node_modules",
+						".git/",
+						"%.lock",
+						"bin/Debug",
+						"bin/Release",
+						"obj/",
+						"dist/",
+					},
+
+					-- ── Keymaps inside telescope ─────────────
+					-- These apply INSIDE the telescope popup (not globally).
+					mappings = {
+						i = {
+							-- Use Ctrl+j/k to move up/down in results (insert mode).
+							-- More ergonomic than arrow keys.
+							["<C-j>"] = actions.move_selection_next,
+							["<C-k>"] = actions.move_selection_previous,
+
+							-- Send results to quickfix list with Ctrl+q.
+							-- Useful for grep results you want to iterate through.
+							["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+
+							-- Scroll the preview pane.
+							["<C-d>"] = actions.preview_scrolling_down,
+							["<C-u>"] = actions.preview_scrolling_up,
+
+							-- Close with Esc (default, but explicit for clarity).
+							["<Esc>"] = actions.close,
+						},
+						n = {
+							-- In normal mode, q also closes (vim convention).
+							["q"] = actions.close,
+						},
+					},
+				},
+
+				pickers = {
+					-- ── Per-picker overrides ─────────────────
+					find_files = {
+						-- Show hidden files (dotfiles). fd's --hidden flag.
+						-- We still respect .gitignore via fd's default behavior.
+						hidden = true,
+					},
+
+					live_grep = {
+						-- Pass extra args to ripgrep for live_grep.
+						additional_args = function()
+							return {
+								"--hidden", -- search in dotfiles
+								"--glob",
+								"!.git/", -- but exclude .git directory
+							}
+						end,
+					},
+				},
+
+				extensions = {
+					-- fzf-native extension config.
+					-- These are the default values — included explicitly so you
+					-- know what's available to tweak.
+					fzf = {
+						fuzzy = true, -- enable fuzzy matching (not just exact)
+						override_generic_sorter = true, -- replace the default sorter
+						override_file_sorter = true, -- replace the file sorter too
+						case_mode = "smart_case", -- smart case like vim's ignorecase+smartcase
+					},
+				},
+			}))
+
+			-- Load the fzf-native extension. This MUST happen after setup().
+			-- It replaces telescope's Lua-based sorter with the compiled C one.
+			telescope.load_extension("fzf")
 		end,
 	},
 }
