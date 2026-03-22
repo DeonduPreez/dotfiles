@@ -6,7 +6,8 @@ config.font =
 config.font_size = 13.0
 
 wezterm.on("user-var-changed", function(window, pane, name, value)
-	if name == "NVIM_DEBUG_TITLE" then
+	wezterm.log_info("user-var-changed: " .. name .. ":" .. value)
+	if name == "WEZTERM_TITLE" then
 		local overrides = window:get_config_overrides() or {}
 		overrides.tab_bar_style = overrides.tab_bar_style or {}
 		window:set_config_overrides(overrides)
