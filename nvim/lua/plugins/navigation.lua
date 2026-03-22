@@ -234,16 +234,6 @@ return {
 			-- Without this, opening `nvim .` would load netrw before neo-tree.
 			vim.g.loaded_netrwPlugin = 1
 			vim.g.loaded_netrw = 1
-
-			-- Auto-open neo-tree when Neovim starts.
-			vim.api.nvim_create_autocmd("BufEnter", {
-				group = vim.api.nvim_create_augroup("neotree_start_open", { clear = true }),
-				desc = "Open Neo-tree when nvim opens",
-				once = true,
-				callback = function()
-					vim.cmd("Neotree show")
-				end,
-			})
 		end,
 	},
 
@@ -251,17 +241,17 @@ return {
 	-- │  telescope.nvim                                          │
 	-- │  Repo: https://github.com/nvim-telescope/telescope.nvim  │
 	-- │  Docs: :h telescope.nvim                                 │
-	-- │  The Swiss Army knife fuzzy finder. Find files, grep      │
-	-- │  text, browse buffers, search help tags, and much more.   │
-	-- │                                                           │
-	-- │  Requirements (already installed per your setup):          │
-	-- │  - ripgrep: used by live_grep and grep_string             │
-	-- │  - fd: used as an alternative to `find` for find_files    │
-	-- │  - fzf-native: C-compiled sorter for much faster fuzzy    │
-	-- │    matching (see telescope-fzf-native below)              │
-	-- │                                                           │
-	-- │  Dependencies:                                            │
-	-- │  - plenary.nvim (required): async utilities               │
+	-- │  The Swiss Army knife fuzzy finder. Find files, grep     │
+	-- │  text, browse buffers, search help tags, and much more.  │
+	-- │                                                          │
+	-- │  Requirements (already installed per your setup):        │
+	-- │  - ripgrep: used by live_grep and grep_string            │
+	-- │  - fd: used as an alternative to `find` for find_files   │
+	-- │  - fzf-native: C-compiled sorter for much faster fuzzy   │
+	-- │    matching (see telescope-fzf-native below)             │
+	-- │                                                          │
+	-- │  Dependencies:                                           │
+	-- │  - plenary.nvim (required): async utilities              │
 	-- └──────────────────────────────────────────────────────────┘
 	{
 		"nvim-telescope/telescope.nvim",
