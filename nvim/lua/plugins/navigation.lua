@@ -577,8 +577,13 @@ return {
 		-- for auto-restore and VimLeavePre for auto-save.
 		lazy = false,
 
+		-- Dependent on telescope
+		dependencies = {
+			"nvim-telescope/telescope.nvim",
+		},
+
 		-- ── Keymaps ──────────────────────────────────────────
-		-- Documented in keymaps.lua under "Quit/Sessions (<leader>q)".
+		-- Documented in keymaps.lua under "Sessions (<leader>q)".
 		keys = {
 			-- Search and switch between saved sessions.
 			-- Uses Telescope if available (it is), falls back to vim.ui.select.

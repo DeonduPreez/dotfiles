@@ -52,7 +52,7 @@ return {
 				{ "<leader>g", group = "Git" },
 				{ "<leader>l", group = "LSP" },
 				{ "<leader>n", group = "Notifications" },
-				{ "<leader>q", group = "Quit/Sessions" },
+				{ "<leader>q", group = "Sessions" },
 				{ "<leader>s", group = "Search/Replace" },
 				{ "<leader>t", group = "Test" },
 				{ "<leader>w", group = "Windows/Splits" },
