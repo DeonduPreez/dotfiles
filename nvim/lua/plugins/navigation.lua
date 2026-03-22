@@ -737,10 +737,10 @@ return {
 					vim.g.initial_session_restore_handled = true
 
 					local first_arg = vim.fn.argv(0)
-					if not first_arg then
+					if not first_arg or first_arg == "" then
+						vim.cmd("Neotree show")
 						return
 					end
-
 					local path_helper = require("helpers.path-helper")
 					local path_type = path_helper.check_path_type(first_arg)
 					if path_type ~= "directory" then
