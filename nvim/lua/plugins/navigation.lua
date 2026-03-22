@@ -26,10 +26,6 @@ return {
 			"nvim-tree/nvim-web-devicons",
 		},
 
-		-- Don't lazy-load neo-tree. It handles its own deferred loading
-		-- internally (the .lazy.lua file in the repo). Setting lazy = false
-		-- here means lazy.nvim will install it, but neo-tree itself won't
-		-- create its UI until you call :Neotree or it detects a directory arg.
 		lazy = false,
 
 		-- ── Keymaps ──────────────────────────────────────────
@@ -234,6 +230,38 @@ return {
 			-- Without this, opening `nvim .` would load netrw before neo-tree.
 			vim.g.loaded_netrwPlugin = 1
 			vim.g.loaded_netrw = 1
+		end,
+	},
+
+	-- ┌────────────────────────────────────────────────────────────────┐
+	-- │  nvim-lsp-file-operations                                      │
+	-- │  Repo: https://github.com/antosha417/nvim-lsp-file-operations  │
+	-- │  Docs: :h nvim-lsp-file-operations                             │
+	-- │  Adds support for file operations using LSP support.           │
+	-- │  This plugin subscribes to events in neo-tree.                 │
+	-- │                                                                │
+	-- │  Dependencies:                                                 │
+	-- │  - plenary.nvim (required): async utilities                    │
+	-- │  - neo-tree.nvim (required): Provides file operation events.   │
+	-- └────────────────────────────────────────────────────────────────┘
+	{
+		"antosha417/nvim-lsp-file-operations",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-neo-tree/neo-tree.nvim", -- makes sure that this loads after Neo-tree.
+		},
+		config = function()
+			require("lsp-file-operations").setup({
+				operations = {
+					willRenameFiles = true,
+					didRenameFiles = true,
+					willCreateFiles = true,
+					didCreateFiles = true,
+					willDeleteFiles = true,
+					didDeleteFiles = true,
+				},
+				timeout_ms = 10000, -- how long to wait (in milliseconds) for file rename information before cancelling
+			})
 		end,
 	},
 
