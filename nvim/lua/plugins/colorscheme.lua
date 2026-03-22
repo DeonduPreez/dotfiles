@@ -62,7 +62,7 @@ return {
 					-- Floating windows (which-key, lazy.nvim UI, LSP hover, etc.)
 					-- need a solid-ish background so they're readable over glass.
 					NormalFloat = { bg = colors.palette.sumiInk2 },
-					FloatBorder = { bg = colors.palette.sumiInk2 },
+					FloatBorder = { bg = "NONE" },
 					FloatTitle = { bg = colors.palette.sumiInk2 },
 
 					-- Inactive windows: NormalNC (Non-Current) applies to every
