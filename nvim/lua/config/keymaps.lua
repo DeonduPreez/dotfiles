@@ -63,6 +63,17 @@ map({ "n", "v" }, "<leader>D", [["_d]], { desc = "Delete without yanking" })
 map("v", "<", "<gv", { desc = "Dedent and re-select" })
 map("v", ">", ">gv", { desc = "Indent and re-select" })
 
+-- ── Boolean toggling (<leader>t) ─────────────────────────────
+-- This can actually be extended to be more than boolean toggling.
+-- <leader>tb — Toggle boolean word under cursor
+--   Logic lives in: lua/helpers/toggle.lua  →  M.toggle_bool()
+local toggle = require("helpers.toggle")
+vim.keymap.set("n", "<leader>tb", toggle.toggle_bool, {
+	desc = "Toggle boolean",
+	noremap = true,
+	silent = true,
+})
+
 -- ── Quit / Sessions (<leader>q) ─────────────────────────────
 -- These mappings are disabled because I don't want to quit so easily. I want quiting to be deliberate with :qa or :qw
 -- map("n", "<leader>qq", "<cmd>qa<CR>", { desc = "Quit all" })
