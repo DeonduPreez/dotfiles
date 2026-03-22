@@ -71,6 +71,36 @@ vim.opt.conceallevel = 0 -- show text normally (no concealing in markdown etc.)
 -- from WSL automatically.
 vim.opt.clipboard = "unnamedplus"
 
+-- ── Floating Window Borders ──────────────────────────────────────────
+-- New in Neovim 0.11: sets the default border style for ALL floating
+-- windows (LSP hover, diagnostics float, which-key, etc.).
+-- Previously you had to configure borders per-plugin; this is the global default.
+-- Options: "none", "single", "double", "rounded", "solid", "shadow"
+vim.opt.winborder = "rounded"
+
+-- ── Diagnostics ──────────────────────────────────────────────
+-- Neovim 0.11 changed virtual_text from opt-out to opt-in.
+-- Without this, inline diagnostic messages won't appear.
+-- Docs: :h vim.diagnostic.config()
+vim.diagnostic.config({
+	virtual_text = true,
+	severity_sort = true,
+	underline = true,
+	update_in_insert = false,
+	float = {
+		border = "rounded",
+		source = true,
+	},
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = " ",
+			[vim.diagnostic.severity.WARN] = " ",
+			[vim.diagnostic.severity.INFO] = " ",
+			[vim.diagnostic.severity.HINT] = " ",
+		},
+	},
+})
+
 -- ── Fill Characters ──────────────────────────────────────────
 -- Cleaner look for folds and end-of-buffer (no ~ tildes).
 -- vim.opt.fillchars = {
