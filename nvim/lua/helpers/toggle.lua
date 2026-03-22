@@ -39,10 +39,12 @@ M.bool_pairs = {
 ---   "title"  — first character upper, rest lower (True / False)
 ---   "upper"  — all characters are uppercase  (TRUE / FALSE)
 ---   "mixed"  — anything else (tRuE, fAlSe, …) — treated as lowercase
----@param word string
+---@param word string The word to detect the case of.
+---@param lower string The lowercase variant of word.
 ---@return "upper"|"title"|"lower"|"mixed"
-local function detect_case(word)
-	if word == word:lower() then
+local function detect_case(word, lower)
+	lower = lower or word:lower()
+	if word == lower then
 		return "lower"
 	end
 
@@ -83,7 +85,6 @@ end
 --- so normal undo (u) works as expected.
 function M.toggle_bool()
 	local word = vim.fn.expand("<cword>")
-	local style = detect_case(word)
 
 	-- We only act on recognised words; silently do nothing otherwise.
 	local lower = word:lower()
@@ -94,9 +95,11 @@ function M.toggle_bool()
 		return
 	end
 
+	local casing = detect_case(word, lower)
+
 	-- Mixed case falls through to "lower" in apply_case, normalising
 	-- tRuE → false and fAlSe → true rather than skipping them.
-	local replacement = apply_case(opposite, style)
+	local replacement = apply_case(opposite, casing)
 
 	-- `ciw` changes the inner word and drops us into Insert mode, then
 	-- <Esc> returns to Normal.  This keeps the change in the undo tree like
