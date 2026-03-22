@@ -21,6 +21,7 @@ M.bool_pairs = {
 	["1"] = "0",
 	["0"] = "1",
 	["yes"] = "no",
+	["no"] = "yes",
 	["enable"] = "disable",
 	["disable"] = "enable",
 	["enabled"] = "disabled",
@@ -100,7 +101,8 @@ function M.toggle_bool()
 	-- `ciw` changes the inner word and drops us into Insert mode, then
 	-- <Esc> returns to Normal.  This keeps the change in the undo tree like
 	-- any other edit.
-	vim.cmd("normal! ciw" .. replacement)
+	local esc = vim.api.nvim_replace_termcodes("<Esc>", true, false, true)
+	vim.cmd("normal! ciw" .. replacement .. esc .. "b")
 end
 
 return M
