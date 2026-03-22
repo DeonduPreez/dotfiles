@@ -214,11 +214,11 @@ return {
 				end,
 				desc = "Delete buffer",
 			},
-			-- Force close the current buffer
+			-- Force close the current buffer. We're still not closing the IDE.
 			{
 				"<leader>bD",
 				function(bufnr)
-					require("helpers.safe-buf-delete").force_delete(bufnr, true)
+					require("helpers.safe-buf-delete").force_delete(bufnr)
 				end,
 				desc = "Force delete buffer",
 			},
@@ -311,14 +311,6 @@ return {
 				-- Don't show the bufferline when there's only 1 buffer open.
 				-- Saves vertical space until you actually have multiple files open.
 				always_show_bufferline = true,
-
-				-- Hover effects (requires terminal mouse support — WezTerm has it).
-				-- TODO : Do we really need to have a hover to show the close button?
-				hover = {
-					enabled = true,
-					delay = 150,
-					reveal = { "close" }, -- show close button on hover
-				},
 
 				-- Sort buffers by their buffer number (insertion order).
 				-- This means new files appear at the end, matching the mental model
