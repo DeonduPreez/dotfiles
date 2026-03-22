@@ -119,6 +119,10 @@ return {
 				},
 
 				lualine_x = {
+					function()
+						return require("auto-session.lib").current_session_name(true)
+					end,
+
 					-- Show encoding only if it's something unusual (not utf-8).
 					-- Most files are utf-8 so this saves space in the common case.
 					{
