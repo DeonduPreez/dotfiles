@@ -307,7 +307,7 @@ return {
 			-- entire project. This is the Ctrl+Shift+F equivalent from Rider.
 			-- Uses ripgrep under the hood.
 			{
-				"<leader>fg",
+				"<leader>/",
 				function()
 					require("telescope.builtin").live_grep()
 				end,
@@ -391,7 +391,7 @@ return {
 			-- Fuzzy-find in the current buffer (like Ctrl+F in an editor
 			-- but with fuzzy matching and a preview).
 			{
-				"<leader>/",
+				"<leader>fg",
 				function()
 					require("telescope.builtin").current_buffer_fuzzy_find()
 				end,
@@ -465,6 +465,8 @@ return {
 					-- These apply INSIDE the telescope popup (not globally).
 					mappings = {
 						i = {
+							-- TODO: Check if we can add an action that yoinks the selected item (like <C-y> in)
+
 							-- Use Ctrl+j/k to move up/down in results (insert mode).
 							-- More ergonomic than arrow keys.
 							["<C-j>"] = actions.move_selection_next,
@@ -525,5 +527,205 @@ return {
 			-- It replaces telescope's Lua-based sorter with the compiled C one.
 			telescope.load_extension("fzf")
 		end,
+	},
+
+	-- ┌──────────────────────────────────────────────────────────┐
+	-- │  auto-session                                            │
+	-- │  Repo: https://github.com/rmagatti/auto-session          │
+	-- │  Docs: :h auto-session  |  :checkhealth auto-session     │
+	-- │  Automatic session management: saves on quit, restores   │
+	-- │  on startup, with built-in Telescope picker and git      │
+	-- │  branch support.                                         │
+	-- │                                                          │
+	-- │  Unlike persistence.nvim (which only auto-saves and      │
+	-- │  requires manual restore), auto-session handles the      │
+	-- │  full lifecycle — save, restore, suppress, branch-swap   │
+	-- │  — without custom autocmds.                              │
+	-- └──────────────────────────────────────────────────────────┘
+	{
+		"rmagatti/auto-session",
+
+		-- Must load at startup (not lazy) so it can intercept VimEnter
+		-- for auto-restore and VimLeavePre for auto-save.
+		lazy = false,
+
+		-- ── Keymaps ──────────────────────────────────────────
+		-- Documented in keymaps.lua under "Quit/Sessions (<leader>q)".
+		keys = {
+			-- Search and switch between saved sessions.
+			-- Uses Telescope if available (it is), falls back to vim.ui.select.
+			{
+				"<leader>qs",
+				"<cmd>AutoSession search<CR>",
+				desc = "Search sessions",
+			},
+
+			-- Save the current session manually.
+			-- Normally auto-session saves on quit, but this lets you
+			-- snapshot the current state at any time.
+			{
+				"<leader>qS",
+				"<cmd>AutoSession save<CR>",
+				desc = "Save session",
+			},
+
+			-- Toggle auto-save on/off for the current Neovim instance.
+			-- Useful when you've opened a bunch of scratch files you
+			-- don't want persisted.
+			{
+				"<leader>qd",
+				"<cmd>AutoSession toggle<CR>",
+				desc = "Toggle session auto-save",
+			},
+
+			-- Delete the session for the current directory.
+			-- Useful for cleaning up stale sessions.
+			{
+				"<leader>qD",
+				"<cmd>AutoSession delete<CR>",
+				desc = "Delete current session",
+			},
+		},
+
+		---@module "auto-session"
+		---@type AutoSession.Config
+		opts = {
+			-- ── Saving / restoring ────────────────────────────────
+			auto_save = true, -- Enables/disables auto saving session on exit
+			auto_restore = true, -- Enables/disables auto restoring session on start
+			auto_create = true, -- Enables/disables auto creating new session files. Can be a function that returns true if a new session file should be allowed
+			auto_restore_last_session = false, -- On startup, loads the last saved session if session for cwd does not exist
+			cwd_change_handling = true, -- Automatically save/restore sessions when changing directories
+			single_session_mode = false, -- Enable single session mode to keep all work in one session regardless of cwd changes. When enabled, prevents creation of separate sessions for different directories and maintains one unified session. Does not work with cwd_change_handling
+
+			-- ── Filtering ────────────────────────────────
+			suppressed_dirs = {
+				"~/",
+				"~/Downloads",
+				"/tmp",
+				"/",
+				"C:/",
+				"C:/Source",
+				"C:/AISource",
+			}, -- Suppress session restore/create in certain directories
+			allowed_dirs = nil, -- Allow session restore/create in certain directories
+			bypass_save_filetypes = { "neo-tree", "noice" }, -- List of filetypes to bypass auto save when the only buffer open is one of the file types listed, useful to ignore dashboards
+			close_filetypes_on_save = { "checkhealth" }, -- Buffers with matching filetypes will be closed before saving
+			close_unsupported_windows = true, -- Close windows that aren't backed by normal file before autosaving a session
+			preserve_buffer_on_restore = nil, -- Function that returns true if a buffer should be preserved when restoring a session
+
+			-- ── Git / Session naming ──────────────────────────
+			git_use_branch_name = true, -- Include git branch name in session name, can also be a function that takes an optional path and returns the name of the branch
+			git_auto_restore_on_branch_change = true, -- Should we auto-restore the session when the git branch changes. Requires git_use_branch_name
+			custom_session_tag = nil, -- Function that can return a string to be used as part of the session name
+
+			-- Deleting
+			auto_delete_empty_sessions = true, -- Enables/disables deleting the session if there are only unnamed/empty buffers when auto-saving
+			purge_after_minutes = nil, -- Sessions older than purge_after_minutes will be deleted asynchronously on startup, e.g. set to 14400 to delete sessions that haven't been accessed for more than 10 days, defaults to off (no purging), requires >= nvim 0.10
+
+			-- Saving extra data
+			-- TODO: Include dap breakpoints and possibly quickfix windows
+			save_extra_data = nil, -- Function that returns extra data that should be saved with the session. Will be passed to restore_extra_data on restore
+			restore_extra_data = nil, -- Function called when there's extra data saved for a session
+
+			-- Argument handling
+			args_allow_single_directory = true, -- Follow normal session save/load logic if launched with a single directory as the only argument
+			args_allow_files_auto_save = false, -- Allow saving a session even when launched with a file argument (or multiple files/dirs). It does not load any existing session first. Can be true or a function that returns true when saving is allowed. See documentation for more detail
+
+			-- Misc
+			log_level = "error", -- Sets the log level of the plugin (debug, info, warn, error).
+			root_dir = vim.fn.stdpath("data") .. "/sessions/", -- Root dir where sessions will be stored
+			show_auto_restore_notif = true, -- Whether to show a notification when auto-restoring
+			restore_error_handler = nil, -- Function called when there's an error restoring. By default, it ignores fold and help errors otherwise it displays the error and returns false to disable auto_save. Default handler is accessible as require('auto-session').default_restore_error_handler
+			continue_restore_on_error = true, -- Keep loading the session even if there's an error
+			lsp_stop_on_restore = false, -- Should language servers be stopped when restoring a session. Can also be a function that will be called if set. Not called on autorestore from startup
+			lazy_support = true, -- Automatically detect if Lazy.nvim is being used and wait until Lazy is done to make sure session is restored correctly. Does nothing if Lazy isn't being used
+			legacy_cmds = true, -- Define legacy commands: Session*, Autosession (lowercase s), currently true. Set to false to prevent defining them
+
+			-- ── Session Picker (Telescope) ───────────────────
+			---@type SessionLens
+			session_lens = {
+				picker = "telescope", -- "telescope"|"snacks"|"fzf"|"select"|nil Pickers are detected automatically but you can also set one manually. Falls back to vim.ui.select
+				load_on_setup = true, -- Only used for telescope, registers the telescope extension at startup so you can use :Telescope session-lens
+				picker_opts = nil, -- Table passed to Telescope / Snacks / Fzf-Lua to configure the picker. See below for more information
+				previewer = "summary", -- 'summary'|'active_buffer'|function - How to display session preview. 'summary' shows a summary of the session, 'active_buffer' shows the contents of the active buffer in the session, or a custom function
+
+				---@type SessionLensMappings
+				mappings = {
+					-- Mode can be a string or a table, e.g. {"i", "n"} for both insert and normal mode
+					delete_session = { "i", "<C-d>" }, -- mode and key for deleting a session from the picker
+					alternate_session = { "i", "<C-s>" }, -- mode and key for swapping to alternate session from the picker
+					copy_session = { "i", "<C-y>" }, -- mode and key for copying a session from the picker
+				},
+
+				---@type SessionControl
+				session_control = {
+					control_dir = vim.fn.stdpath("data") .. "/auto_session/", -- Auto session control dir, for control files, like alternating between two sessions with session-lens
+					control_filename = "session_control.json", -- File name of the session control file
+				},
+			},
+
+			-- ── Hooks ────────────────────────────
+			-- After a session is restored, reopen neo-tree.
+			-- auto-session closes unsupported windows before saving,
+			-- so neo-tree needs to be reopened after restore.
+			-- "show" opens it without stealing focus from the editor.
+
+			--- pre_save_cmds? (string|fun(session_name:string): boolean)[] executes before a session is saved, return false to stop auto-saving
+			--- post_save_cmds? (string|fun(session_name:string))[] executes after a session is saved
+			--- pre_restore_cmds? (string|fun(session_name:string): boolean)[] executes before a session is restored, return false to stop auto-restoring
+			--- post_restore_cmds? (string|fun(session_name:string))[] executes after a session is restored
+			post_restore_cmds = {
+				"Neotree show",
+				function()
+					local session_name = require("auto-session.lib").current_session_name(true)
+					vim.g.sess_name = session_name
+					if not session_name then
+						session_name = "Unknown"
+					end
+
+					require("helpers.wztrm-helper").set_terminal_title(session_name)
+				end,
+			},
+
+			--- pre_delete_cmds? (string|fun(session_name:string))[] executes before a session is deleted
+			--- post_delete_cmds? (string|fun(session_name:string))[] executes after a session is deleted
+			--- no_restore_cmds? (string|fun(is_startup:boolean))[] executes when no session is restored when auto-restoring, happens on startup or possibly on cwd/git branch changes
+			no_restore_cmds = {
+				function(is_startup)
+					if not is_startup then
+						return
+					end
+
+					if vim.g.initial_session_restore_handled then
+						return
+					end
+
+					vim.g.initial_session_restore_handled = true
+
+					local first_arg = vim.fn.argv(0)
+					if not first_arg then
+						return
+					end
+
+					local path_helper = require("helpers.path-helper")
+					local path_type = path_helper.check_path_type(first_arg)
+					if path_type ~= "directory" then
+						return
+					end
+
+					vim.cmd("Neotree show")
+				end,
+			},
+
+			--- pre_cwd_changed_cmds? (string|fun())[] executes before cwd is changed if cwd_change_handling is true
+			--- post_cwd_changed_cmds? (string|fun())[] executes after cwd is changed if cwd_change_handling is true
+			post_cwd_changed_cmds = {
+				function()
+					require("lualine").refresh() -- example refreshing the lualine status line _after_ the cwd changes
+				end,
+			},
+			--- save_extra_cmds? (string|fun(session_name:string): string|table|nil)[] executes to get extra data to save with the session
+		},
 	},
 }
