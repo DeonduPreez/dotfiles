@@ -102,13 +102,10 @@ local function check_neovim()
 	end
 
 	if vim.fn.has("nvim-0.11") == 1 then
-		vim.health.ok("Neovim " .. ver_str .. " (>= 0.11, recommended)")
-	elseif vim.fn.has("nvim-0.10") == 1 then
-		vim.health.warn("Neovim " .. ver_str .. " — 0.11+ is recommended (fixes vim.ui_attach issues for noice.nvim)")
+		vim.health.ok("Neovim " .. ver_str .. " (>= 0.11)")
 	else
-		vim.health.error("Neovim " .. ver_str .. " — 0.10+ is required for this config")
+		vim.health.error("Neovim " .. ver_str .. " — 0.11+ is required for this config")
 	end
-
 	-- Build type
 	local build = vim.fn.execute("version")
 	if build:find("Release") then
