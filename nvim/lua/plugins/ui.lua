@@ -81,9 +81,9 @@ return {
 					{
 						"diff",
 						symbols = {
-							added = " ", -- nerd font icon
-							modified = " ",
-							removed = " ",
+							added = " ", -- nerd font icon
+							modified = " ",
+							removed = " ",
 						},
 					},
 
@@ -94,10 +94,10 @@ return {
 						"diagnostics",
 						sources = { "nvim_diagnostic" },
 						symbols = {
-							error = " ",
-							warn = " ",
-							info = " ",
-							hint = " ",
+							error = " ",
+							warn = " ",
+							info = " ",
+							hint = " 󰛨",
 						},
 					},
 				},
@@ -111,7 +111,7 @@ return {
 						path = 1, -- 0=filename, 1=relative, 2=absolute, 3=absolute with ~ for home
 						symbols = {
 							modified = " ●", -- indicator for unsaved changes
-							readonly = " ", -- lock icon for readonly files
+							readonly = " ", -- lock icon for readonly files
 							unnamed = "[No Name]",
 							newfile = "[New]",
 						},
@@ -274,10 +274,10 @@ return {
 				---@diagnostic disable-next-line: unused-local
 				diagnostics_indicator = function(count, level, diagnostics_dict, context)
 					local icons = {
-						error = " ",
-						warning = " ",
-						info = " ",
-						hint = " ",
+						error = " ",
+						warning = " ",
+						info = " ",
+						hint = " 󰛨",
 					}
 					local result = ""
 					for severity, icon in pairs(icons) do
