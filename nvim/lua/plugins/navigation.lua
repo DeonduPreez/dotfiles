@@ -57,31 +57,6 @@ return {
 				end,
 				desc = "Focus Explorer",
 			},
-
-			-- Show open buffers in the tree panel (like JetBrains' "Open Files" tab).
-			{
-				"<leader>be",
-				function()
-					require("neo-tree.command").execute({
-						toggle = true,
-						source = "buffers",
-						position = "right",
-					})
-				end,
-				desc = "Buffer Explorer (root dir)",
-			},
-
-			-- Show git status in the tree panel (changed/staged/untracked files).
-			{
-				"<leader>ge",
-				function()
-					require("neo-tree.command").execute({
-						toggle = true,
-						source = "git_status",
-					})
-				end,
-				desc = "Git Explorer",
-			},
 		},
 
 		opts = {
@@ -147,6 +122,16 @@ return {
 					-- This matches the LazyVim convention and feels natural.
 					["l"] = "open",
 					["h"] = "close_node",
+
+					["e"] = function()
+						vim.api.nvim_exec2("Neotree focus filesystem left", { output = true })
+					end,
+					["b"] = function()
+						vim.api.nvim_exec2("Neotree focus buffers left", { output = true })
+					end,
+					["g"] = function()
+						vim.api.nvim_exec2("Neotree focus git_status left", { output = true })
+					end,
 
 					-- Disable space in neo-tree so it doesn't conflict with <leader>.
 					-- Without this, pressing space (our leader) in the tree would
