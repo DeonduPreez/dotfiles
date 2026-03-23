@@ -1,5 +1,16 @@
 local M = {}
 
+--- Checks if the path exists
+---@param path string Path to check
+function M.check_path_exists(path)
+	local stat = vim.loop.fs_stat(path)
+	if not stat then
+		return false
+	end
+
+	return true
+end
+
 --- Check the type of the path passed in
 --- Returns nil when path is not file system path
 ---@param path any
