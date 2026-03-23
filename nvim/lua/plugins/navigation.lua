@@ -133,6 +133,8 @@ return {
 						vim.api.nvim_exec2("Neotree focus git_status left", { output = true })
 					end,
 
+					["O"] = "open_in_explorer",
+
 					-- Disable space in neo-tree so it doesn't conflict with <leader>.
 					-- Without this, pressing space (our leader) in the tree would
 					-- trigger neo-tree's default space action instead of which-key.
@@ -154,6 +156,26 @@ return {
 					-- Pressing P again on the same file will close the preview.
 					["P"] = { "toggle_preview", config = { use_float = false } },
 				},
+			},
+
+			commands = {
+				open_in_explorer = function(state)
+					local node = state.tree:get_node()
+					local path = node:get_id()
+
+					local wsl = require("helpers.wsl-helper")
+					wsl.open_in_explorer(path)
+
+					-- Windows: Without removing the file from the path, it opens in code.exe instead of explorer.exe
+					-- local p
+					-- local lastSlashIndex = path:match("^.+()\\[^\\]*$") -- Match the last slash and everything before it
+					-- if lastSlashIndex then
+					-- p = path:sub(1, lastSlashIndex - 1) -- Extract substring before the last slash
+					-- else
+					-- p = path -- If no slash found, return original path
+					-- end
+					-- vim.cmd("silent !start explorer " .. p)
+				end,
 			},
 
 			-- ── Filesystem Source ─────────────────────────────
