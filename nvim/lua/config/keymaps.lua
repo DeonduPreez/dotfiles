@@ -68,11 +68,32 @@ map("v", ">", ">gv", { desc = "Indent and re-select" })
 -- <leader>tb — Toggle boolean word under cursor
 --   Logic lives in: lua/helpers/toggle.lua  →  M.toggle_bool()
 local toggle = require("helpers.toggle")
-vim.keymap.set("n", "<leader>tb", toggle.toggle_bool, {
+map("n", "<leader>tb", toggle.toggle_bool, {
 	desc = "Toggle boolean",
 	noremap = true,
 	silent = true,
 })
+
+local wsl = require("helpers.wsl-helper")
+map("n", "<C-O>", function()
+	--wsl.open_in_explorer()
+	local bypass_filetypes = { "neo-tree", "noice" }
+
+	local filetype = vim.bo.filetype
+
+	for _, value in ipairs(bypass_filetypes) do
+		if value == filetype then
+			return
+		end
+	end
+
+	local path = vim.api.nvim_buf_get_name(0)
+	wsl.open_in_explorer(path)
+
+	-- For debugging purposes
+	-- print(vim.api.nvim_buf_get_name(0))
+	-- print(vim.bo.filetype)
+end, { desc = "Open in file explorer" })
 
 -- ── Quit / Sessions (<leader>q) ─────────────────────────────
 -- These mappings are disabled because I don't want to quit so easily. I want quiting to be deliberate with :qa or :qw
