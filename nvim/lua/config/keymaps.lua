@@ -76,23 +76,7 @@ map("n", "<leader>tb", toggle.toggle_bool, {
 
 local wsl = require("helpers.wsl-helper")
 map("n", "<C-O>", function()
-	--wsl.open_in_explorer()
-	local bypass_filetypes = { "neo-tree", "noice" }
-
-	local filetype = vim.bo.filetype
-
-	for _, value in ipairs(bypass_filetypes) do
-		if value == filetype then
-			return
-		end
-	end
-
-	local path = vim.api.nvim_buf_get_name(0)
-	wsl.open_in_explorer(path)
-
-	-- For debugging purposes
-	-- print(vim.api.nvim_buf_get_name(0))
-	-- print(vim.bo.filetype)
+	wsl.open_in_explorer()
 end, { desc = "Open in file explorer" })
 
 -- ── Quit / Sessions (<leader>q) ─────────────────────────────
