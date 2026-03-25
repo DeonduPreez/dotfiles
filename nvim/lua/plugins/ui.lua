@@ -69,6 +69,10 @@ return {
 			{ "<leader>b3", "<cmd>BufferLineGoToBuffer 3<CR>", desc = "Go to buffer 3" },
 			{ "<leader>b4", "<cmd>BufferLineGoToBuffer 4<CR>", desc = "Go to buffer 4" },
 			{ "<leader>b5", "<cmd>BufferLineGoToBuffer 5<CR>", desc = "Go to buffer 5" },
+			{ "<leader>b6", "<cmd>BufferLineGoToBuffer 6<CR>", desc = "Go to buffer 6" },
+			{ "<leader>b7", "<cmd>BufferLineGoToBuffer 7<CR>", desc = "Go to buffer 7" },
+			{ "<leader>b8", "<cmd>BufferLineGoToBuffer 8<CR>", desc = "Go to buffer 8" },
+			{ "<leader>b9", "<cmd>BufferLineGoToBuffer 9<CR>", desc = "Go to buffer 9" },
 		},
 
 		opts = {
@@ -96,7 +100,7 @@ return {
                     local harpoonindex = require("helpers.harpoon-helper").get_harpoon_index(path)
 
                     local ordinalstring = "" 
-                    if opts.ordinal <= 5 then
+                    if opts.ordinal <= 9 then
                         ordinalstring = opts.ordinal .. "."
                     end
 
