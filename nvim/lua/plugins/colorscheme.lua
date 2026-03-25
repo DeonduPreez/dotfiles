@@ -98,7 +98,7 @@ return {
 					PmenuThumb = { bg = colors.palette.sumiInk4 },
 
 					-- Vertical split separator: thin subtle line, not a thick bar.
-					WinSeparator = { fg = colors.palette.sumiInk4, bg = "NONE" },
+					WinSeparator = { fg = "red", bg = "NONE" },
 				}
 			end,
 		})
