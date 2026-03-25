@@ -210,11 +210,11 @@ return {
 			-- Shows a letter overlay on each tab — press the letter to jump.
 			{ "<leader>bj", "<cmd>BufferLinePick<CR>", desc = "Pick buffer" },
 
-			-- Close the current buffer. Uses a custom safe delete :bdelete which keeps the window
+			-- Close the current buffer. Uses a safe buffer delete that doesn't close the last buffer and kill vim.
 			{
 				"<leader>bd",
 				function(bufnr)
-					require("helpers.safe-buf-delete").delete(bufnr)
+					require("helpers.buf-helper").delete(bufnr)
 				end,
 				desc = "Delete buffer",
 			},
@@ -222,7 +222,7 @@ return {
 			{
 				"<leader>bD",
 				function(bufnr)
-					require("helpers.safe-buf-delete").force_delete(bufnr)
+					require("helpers.buf-helper").force_delete(bufnr)
 				end,
 				desc = "Force delete buffer",
 			},
@@ -244,21 +244,18 @@ return {
 
 		opts = {
 			options = {
-				-- Mode: show buffers (not vim tabpages). This makes the top bar
-				-- behave like JetBrains editor tabs — one tab per open file.
+				-- One tab per open file.
 				mode = "buffers",
 
-				-- Thin separators look clean against the transparent background.
-				-- Other styles: "slant", "slope", "thick", "padded_slant".
-				-- "thin" uses minimal vertical lines between tabs.
+				-- Available styles: "slant", "slope", "thick", "padded_slant", "thin"
 				separator_style = "thin",
 
-				-- Show close button on each tab. Clicking it closes the buffer.
+				-- Show close button on each tab. Clicking it closes the buffer (safely).
 				close_command = function(bufnr)
-					require("helpers.safe-buf-delete").delete(bufnr, true)
+					require("helpers.buf-helper").delete(bufnr, true)
 				end,
 				right_mouse_command = function(bufnr)
-					require("helpers.safe-buf-delete").delete(bufnr, true)
+					require("helpers.buf-helper").delete(bufnr, true)
 				end,
 
 				-- Show buffer ordinal numbers (1, 2, 3...) for quick jumping.
