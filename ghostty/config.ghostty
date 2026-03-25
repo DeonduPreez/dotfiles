@@ -1,0 +1,12 @@
+config-file = auto/theme.ghostty
+
+keybind = ctrl+shift+alt+,=reload_config
+keybind = ctrl+shift+alt+v=paste_from_clipboard
+keybind = ctrl+shift+alt+l=next_tab
+keybind = ctrl+shift+alt+h=previous_tab
+
+# Unbinding existing keybinds
+keybind = ctrl+shift+a=unbind
+keybind = ctrl+shift+c=unbind
+keybind = ctrl+shift+v=unbind
+keybind = ctrl+shift+,=unbind

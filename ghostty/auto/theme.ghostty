@@ -1,0 +1,7 @@
+# theme = TokyoNight
+theme = Xcode Dark hc
+
+font-family = "JetBrainsMono Nerd Font Mono"
+font-style = "DemiBold"
+
+# custom-shader = shaders/starfield.glsl
