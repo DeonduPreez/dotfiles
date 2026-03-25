@@ -72,3 +72,4 @@ create_symlink() {
 # Create symlinks
 create_symlink "nvim" "$HOME/.config/nvim"
 create_symlink "wezterm" "$HOME/.config/wezterm"
+create_symlink "ghostty" "$HOME/.config/ghostty"
