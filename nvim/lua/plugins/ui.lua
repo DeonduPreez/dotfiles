@@ -73,6 +73,7 @@ return {
 			{ "<leader>b7", "<cmd>BufferLineGoToBuffer 7<CR>", desc = "Go to buffer 7" },
 			{ "<leader>b8", "<cmd>BufferLineGoToBuffer 8<CR>", desc = "Go to buffer 8" },
 			{ "<leader>b9", "<cmd>BufferLineGoToBuffer 9<CR>", desc = "Go to buffer 9" },
+			{ "<leader>b10", "<cmd>BufferLineGoToBuffer 10<CR>", desc = "Go to buffer 10" },
 		},
 
 		opts = {
@@ -94,24 +95,19 @@ return {
 				-- Show buffer ordinal numbers (1, 2, 3...) for quick jumping.
 				-- Combined with <leader>b1, b2, etc. keymaps above.
 				numbers = function (opts)
-                    local harpoon_icon = "󱡀 "
-
-                    local path = vim.api.nvim_buf_get_name(opts.id)
-                    local harpoonindex = require("helpers.harpoon-helper").get_harpoon_index(path)
-
-                    local ordinalstring = "" 
-                    if opts.ordinal <= 9 then
-                        ordinalstring = opts.ordinal .. "."
+                    if opts.ordinal <= 10 then
+                        return opts.ordinal .. "."
                     end
-
-                    local finaltext = ""
-                    if harpoonindex then
-                        return ordinalstring .. " " .. harpoon_icon .. harpoonindex
-                    elseif opts.ordinal then
-                        return ordinalstring
-                    end
-
                     return nil
+                end,
+
+                name_formatter = function(buf)
+                    local idx = require("helpers.harpoon-helper").get_harpoon_index(buf.path)
+                    if idx then
+                        return buf.name .. " 󱡀 " .. idx
+                    end
+
+                    return buf.name
                 end,
 
 				-- Show LSP diagnostics in the bufferline (error/warning indicators).
