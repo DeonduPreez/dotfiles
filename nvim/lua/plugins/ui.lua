@@ -89,7 +89,26 @@ return {
 
 				-- Show buffer ordinal numbers (1, 2, 3...) for quick jumping.
 				-- Combined with <leader>b1, b2, etc. keymaps above.
-				numbers = "ordinal",
+				numbers = function (opts)
+                    local harpoon_icon = "󱡀 "
+
+                    local path = vim.api.nvim_buf_get_name(opts.id)
+                    local harpoonindex = require("helpers.harpoon-helper").get_harpoon_index(path)
+
+                    local ordinalstring = "" 
+                    if opts.ordinal <= 5 then
+                        ordinalstring = opts.ordinal .. "."
+                    end
+
+                    local finaltext = ""
+                    if harpoonindex then
+                        return ordinalstring .. " " .. harpoon_icon .. harpoonindex
+                    elseif opts.ordinal then
+                        return ordinalstring
+                    end
+
+                    return nil
+                end,
 
 				-- Show LSP diagnostics in the bufferline (error/warning indicators).
 				-- Requires nvim LSP (Phase 5). Until then, shows nothing extra.

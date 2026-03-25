@@ -726,6 +726,9 @@ return {
 
 					require("helpers.wztrm-helper").set_terminal_title(session_name)
 				end,
+                function()
+                    require("helpers.harpoon-helper").rebuild_harpoon_cache()
+                end
 			},
 
 			--- pre_delete_cmds? (string|fun(session_name:string))[] executes before a session is deleted
@@ -756,6 +759,9 @@ return {
 
 					vim.cmd("Neotree show")
 				end,
+                function()
+                    require("helpers.harpoon-helper").rebuild_harpoon_cache()
+                end
 			},
 
 			--- pre_cwd_changed_cmds? (string|fun())[] executes before cwd is changed if cwd_change_handling is true
