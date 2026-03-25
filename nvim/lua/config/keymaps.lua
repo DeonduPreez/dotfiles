@@ -60,18 +60,15 @@ map("n", "n", "nzzzv", { desc = "Next search result (centered)" })
 map("n", "N", "Nzzzv", { desc = "Prev search result (centered)" })
 map("v", "n", "nzzzv", { desc = "Next search result (centered)" })
 map("v", "N", "Nzzzv", { desc = "Prev search result (centered)" })
-
--- Paste over selection without losing the paste register.
--- By default, pasting over selected text puts the replaced text into the
--- register, so your next paste is the text you just replaced. This fixes that.
-map("x", "<leader>p", [["_dP]], { desc = "Paste without overwriting register" })
+map("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
 
 -- ── Delete without yank (<leader>D) ─────────────────────────────
 -- Delete without yanking (send to black hole register).
 -- TODO : We need a better way to do this, <leader>D is not intuitive.
 map({ "n", "v" }, "<leader>D", [["_d]], { desc = "Delete without yanking" })
 
--- Better indenting: re-selects the visual selection after indent/dedent.
+-- ── Indenting (><) ─────────────────────────────
+-- Better indenting: re-selects the visual selection after indent / dedent.
 map("v", "<", "<gv", { desc = "Dedent and re-select" })
 map("v", ">", ">gv", { desc = "Indent and re-select" })
 
