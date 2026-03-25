@@ -84,6 +84,8 @@ end
 --- Uses `<cword>` to grab the word under the cursor and `ciw` to replace it,
 --- so normal undo (u) works as expected.
 function M.toggle_bool()
+    -- TODO : Get the cursor index and place it back where it was as long as it's in the new word.
+
 	local word = vim.fn.expand("<cword>")
 
 	-- We only act on recognised words; silently do nothing otherwise.

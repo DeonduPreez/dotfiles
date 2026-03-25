@@ -7,6 +7,22 @@
 -- ║  in comment blocks so you can see ALL bindings in one file.║
 -- ╚══════════════════════════════════════════════════════════════╝
 
+-- TODO : Update Ghostty keybinds via dotfiles config (ctrl+v) (ctrl+shift+s sometimes) (ctrl+shift+t)
+-- TODO : After startup, if we opened with a directory or no args and there is no session we should auto-focus Neo-tree
+-- TODO : When on the start of the line and going left go to the previous line's end
+-- TODO : Add a keymap that expands selection the same way rider does. I can write this myself with test cases I 
+-- TODO : Add a keymap that moves the window all the way to the left or all the way to the right (<leader>wH , <leader>wL)
+-- TODO : Add a keymap that goes to the start of the file like Ctrl+Home (Ctrl+Shift+H)
+-- TODO : Add a keymap that goes to the end of the file like Ctrl+End (Ctrl+Shift+L)
+-- TODO : Add a keymap that yanks the whole file's contents and sets the cursor position back to previous position. Was thinking <C-A> (Ctrl+Shift+A) - maybe make it v<C-a> so Ctrl+a while in visual mode.
+-- TODO : Add a keymap that copies the file's absolute path. (Ctrl+Shift+c like Rider)
+-- TODO : Maybe look for/create a plugin that checks checklist lines and allows you to press shift+enter in insert mode or another key combo in visual mode to enter insert mode and create a new dotted line on the next line. Use some fancy regex, we want to allow commented/uncommented lines for this.
+-- TODO : Extend the above to allow numbered lines as well.
+
+
+-- TODO : Add a keymap in Neo-tree that allows adding to git (Ctrl+Shift+A)
+-- TODO : In Neo-tree, when renaming, if the file exists in git, do a git move. Look at other git commands that happen in Rider from the Explorer UI.
+
 local map = vim.keymap.set
 
 -- ═══════════════════════════════════════════════════════════════
@@ -15,6 +31,7 @@ local map = vim.keymap.set
 -- ── Pasting (<C-Home> / <C-End>) ────────────────────────────
 map("i", "<C-v>", "<C-o><leader>p", { desc = "Paste without overwriting register" })
 -- Paste over selection without yanking.
+-- TODO : We need a better way to do this, <leader>D is not intuitive.
 map("x", "<leader>p", [["_dP]], { desc = "Paste without overwriting register" })
 
 -- ── Home / End (<C-Home> / <C-End>) ────────────────────────────
@@ -69,6 +86,7 @@ map({ "n", "v" }, "<leader>D", [["_d]], { desc = "Delete without yanking" })
 
 -- ── Indenting (><) ─────────────────────────────
 -- Better indenting: re-selects the visual selection after indent / dedent.
+-- TODO : Fix bug here. It doesn't reselect the actual selected text, just the selected indexes.
 map("v", "<", "<gv", { desc = "Dedent and re-select" })
 map("v", ">", ">gv", { desc = "Indent and re-select" })
 

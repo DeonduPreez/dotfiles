@@ -342,6 +342,7 @@ return {
 			-- entire project. This is the Ctrl+Shift+F equivalent from Rider.
 			-- Uses ripgrep under the hood.
 			{
+                -- TODO : Add a copy of this that's only available in visual mode that will yank the selected value and auto-search in Live-Grep (Ctrl+Shift+F in rider)
 				"<leader>/",
 				function()
 					require("telescope.builtin").live_grep()
