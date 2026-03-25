@@ -103,14 +103,14 @@ config.colors = {
 config.win32_system_backdrop = "Acrylic"
 
 -- When using Mica/Tabbed set this to 0 for better results
-config.window_background_opacity = 0.30
+config.window_background_opacity = 0.9
 
 -- Prevent the text cell background from going fully transparent.
 -- Without this, the terminal background color (e.g. from your colorscheme)
 -- will also become transparent, making text hard to read.
 -- Range: 0.0 (invisible) to 1.0 (fully opaque).
 -- ~0.85 gives you a readable semi-transparent feel.
-config.text_background_opacity = 0.85
+config.text_background_opacity = 0.80
 
 -- Remove the titlebar so the glass effect extends to the top edge.
 -- INTEGRATED_BUTTONS moves minimize/maximize/close into the tab bar itself.
