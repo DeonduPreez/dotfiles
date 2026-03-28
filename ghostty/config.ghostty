@@ -10,3 +10,19 @@ keybind = ctrl+shift+a=unbind
 keybind = ctrl+shift+c=unbind
 keybind = ctrl+shift+v=unbind
 keybind = ctrl+shift+,=unbind
+
+# TODO : Check these out and see which are needed
+# cursor-style = block
+# shell-integration-features = no-cursor
+# cursor-style-blink = false
+# link-url = true
+# window-inherit-working-directory = true
+# window-inherit-font-size = true
+# window-theme = system
+# clipboard-trim-trailing-spaces = true
+# mouse-hide-while-typing = true
+# macos-titlebar-proxy-icon = hidden
+# macos-icon = custom-style
+# macos-icon-frame = plastic
+# macos-icon-ghost-color = FFFFFF
+# macos-icon-screen-color = 000000

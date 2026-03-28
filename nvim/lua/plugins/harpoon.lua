@@ -98,7 +98,7 @@ return {
 
     -- ── Keymaps ─────────────────────────────────────────────────────────
     --   <leader>h*  — Namespaced harpoon operations
-    --   h1-9 — Speed aliases for file navigation
+    --   g1-9 — Speed aliases for file navigation
     keys = {
       -- ── Group registration ────────────────────────────────────────────
       {
@@ -137,9 +137,9 @@ return {
         desc = "Harpoon: quick menu",
       },
 
-      -- ── Quick Harpoon Navigation (h1,2,3,4,5,6,7,8,9) ──────────────────────────────
+      -- ── Quick Harpoon Navigation (g1,2,3,4,5,6,7,8,9) ──────────────────────────────
       {
-        "h1",
+        "g1",
         function()
           require("harpoon"):list():select(1)
           -- TODO : All quick navigation need to check if no other buffers except an empty [No Name] Buffer exists,
@@ -148,56 +148,56 @@ return {
         desc = "Harpoon: File 1",
       },
       {
-        "h2",
+        "g2",
         function()
           require("harpoon"):list():select(2)
         end,
         desc = "Harpoon: File 2",
       },
       {
-        "h3",
+        "g3",
         function()
           require("harpoon"):list():select(3)
         end,
         desc = "Harpoon: File 3",
       },
       {
-        "h4",
+        "g4",
         function()
           require("harpoon"):list():select(4)
         end,
         desc = "Harpoon: File 4",
       },
       {
-        "h5",
+        "g5",
         function()
           require("harpoon"):list():select(5)
         end,
         desc = "Harpoon: File 5",
       },
       {
-        "h6",
+        "g6",
         function()
           require("harpoon"):list():select(6)
         end,
         desc = "Harpoon: File 6",
       },
       {
-        "h7",
+        "g7",
         function()
           require("harpoon"):list():select(7)
         end,
         desc = "Harpoon: File 7",
       },
       {
-        "h8",
+        "g8",
         function()
           require("harpoon"):list():select(8)
         end,
         desc = "Harpoon: File 8",
       },
       {
-        "h9",
+        "g9",
         function()
           require("harpoon"):list():select(9)
         end,

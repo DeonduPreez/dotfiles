@@ -7,6 +7,8 @@
 -- ║  in comment blocks so you can see ALL bindings in one file.║
 -- ╚══════════════════════════════════════════════════════════════╝
 
+-- TODO : Check if refactor.nvim can delete the current scope wrapper. Like if (asdf){ {code} } should remove the if, and leave the code.
+
 -- TODO : Update Ghostty keybinds via dotfiles config (ctrl+v) (ctrl+shift+s sometimes) (ctrl+shift+t)
 -- TODO : After startup, if we opened with a directory or no args and there is no session we should auto-focus Neo-tree
 -- TODO : When on the start of the line and going left go to the previous line's end

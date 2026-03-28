@@ -1,5 +1,5 @@
-local wezterm = require("wezterm")
-local config = wezterm.config_builder()
+local wezterm = require("wezterm") ---@type Wezterm
+local config = wezterm.config_builder() ---@type Config
 
 config.font =
 	wezterm.font("JetBrainsMono Nerd Font Mono", { weight = "DemiBold", stretch = "Normal", style = "Normal" })
@@ -33,6 +33,11 @@ config.keys = {
 		mods = "CTRL|SHIFT",
 		action = wezterm.action.DisableDefaultAssignment,
 	},
+	--{
+	--key = "t",
+	--mods = "CTRL|SHIFT|ALT",
+	--action = wezterm.action.,
+	--},
 	-- {
 	-- key = "l",
 	-- mods = "CTRL|SHIFT",
@@ -48,9 +53,16 @@ config.keys = {
 		mods = "CTRL|SHIFT|ALT",
 		action = wezterm.action.ActivateTabRelative(-1),
 	},
+	{
+		key = "f",
+		mods = "CTRL|SHIFT|ALT",
+		action = wezterm.action.ActivateTabRelative(-1),
+	},
 }
 
-config.default_prog = { "wsl.exe", "--distribution", "Ubuntu-24.04" }
+-- config.default_prog = { "wsl.exe", "--distribution", "Ubuntu-24.04" }
+config.default_prog = { "C:/Program Files/PowerShell/7/pwsh.exe" }
+config.enable_kitty_graphics = true
 config.enable_kitty_keyboard = true
 
 -- Disabling truncation of tab titles
