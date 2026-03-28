@@ -1,7 +1,15 @@
-# theme = TokyoNight
-theme = Xcode Dark hc
+theme = TokyoNight
+# theme = Xcode Dark hc
 
 font-family = "JetBrainsMono Nerd Font Mono"
 font-style = "DemiBold"
 
-# custom-shader = shaders/starfield.glsl
+# Cursor Shader
+custom-shader = shaders/sonic_boom_cursor.glsl
+custom-shader = shaders/cursor_warp.glsl
+
+# Background Shader
+# custom-shader = shaders/auto-tracking-spotlight.glsl
+
+# custom-shader = shaders/retro-terminal.glsl
+# custom-shader = shaders/glitchy.glsl
