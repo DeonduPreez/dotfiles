@@ -36,6 +36,4 @@ function M.open_in_explorer(path)
 	-- print(filetype)
 end
 
-function M.open_cur_in_explorer() end
-
 return M
