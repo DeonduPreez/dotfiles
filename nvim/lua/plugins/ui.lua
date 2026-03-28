@@ -73,7 +73,7 @@ return {
 			{ "<leader>b7", "<cmd>BufferLineGoToBuffer 7<CR>", desc = "Go to buffer 7" },
 			{ "<leader>b8", "<cmd>BufferLineGoToBuffer 8<CR>", desc = "Go to buffer 8" },
 			{ "<leader>b9", "<cmd>BufferLineGoToBuffer 9<CR>", desc = "Go to buffer 9" },
-			{ "<leader>b10", "<cmd>BufferLineGoToBuffer 10<CR>", desc = "Go to buffer 10" },
+			{ "<leader>b0", "<cmd>BufferLineGoToBuffer 10<CR>", desc = "Go to buffer 10" },
 		},
 
 		opts = {
