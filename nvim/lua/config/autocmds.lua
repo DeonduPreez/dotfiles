@@ -24,7 +24,6 @@ autocmd("TextYankPost", {
 	end,
 })
 
-
 augroup("set_terminal_title", { clear = true })
 autocmd("BufEnter", {
     group = "set_terminal_title",
@@ -119,4 +118,46 @@ autocmd("FileType", {
 		vim.opt_local.shiftwidth = 2
 		vim.opt_local.softtabstop = 2
 	end,
+})
+
+-- ── Macro Recording — Red Outline ────────────────────────────
+-- When recording a macro, the WinSeparator highlight turns red
+-- to create a visible "outline" around splits. Combined with the
+-- red winbar accent in heirline.lua, this gives a clear visual
+-- signal that you're recording.
+--
+-- We capture the original WinSeparator fg on startup and restore
+-- it when recording stops.
+
+augroup("macro_recording_outline", { clear = true })
+
+-- Store the original WinSeparator color at startup so we can
+-- restore it after recording. We use nvim_get_hl to read the
+-- resolved highlight (link = false follows any links).
+local original_winsep_hl = nil
+
+-- TODO: Maybe check BufEnter and BufLeave as well 
+
+autocmd("RecordingEnter", {
+	group = "macro_recording_outline",
+	callback = function()
+        print("recording enter")
+		-- Capture original before overwriting (only if not already captured)
+		if not original_winsep_hl then
+			original_winsep_hl = vim.api.nvim_get_hl(0, { name = "WinSeparator", link = false })
+		end
+		-- Set WinSeparator to red for the recording outline effect
+		vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#E82424", bg = "NONE" }) -- samuraiRed
+	end,
+})
+
+autocmd("RecordingLeave", {
+	group = "macro_recording_outline",
+	callback = vim.schedule_wrap(function()
+        print("recording leave")
+		-- Restore the original WinSeparator highlight
+		if original_winsep_hl then
+			vim.api.nvim_set_hl(0, "WinSeparator", original_winsep_hl)
+		end
+	end),
 })
