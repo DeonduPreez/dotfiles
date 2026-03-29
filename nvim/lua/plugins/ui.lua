@@ -25,8 +25,20 @@ return {
 		-- as lazy-load triggers. Documented in keymaps.lua under "Buffers".
 		keys = {
 			-- Cycle through buffers (like Ctrl+Tab in a browser / Rider).
-			{ "<S-h>", "<cmd>BufferLineCyclePrev<CR>", desc = "Prev buffer" },
-			{ "<S-l>", "<cmd>BufferLineCycleNext<CR>", desc = "Next buffer" },
+            {
+                "<S-l>",
+                function()
+                    require("helpers.buf-helper").next()
+                end,
+                desc = "Next buffer"
+            },
+            {
+                "<S-h>",
+                function()
+                    require("helpers.buf-helper").prev()
+                end,
+                desc = "Prev buffer"
+            },
 
 			-- Move buffer position in the tab bar (reorder tabs).
 			{ "<leader>bh", "<cmd>BufferLineMovePrev<CR>", desc = "Move buffer left" },
@@ -47,6 +59,7 @@ return {
 				end,
 				desc = "Delete buffer",
 			},
+
 			-- Force close the current buffer. We're still not closing the IDE.
 			{
 				"<leader>bD",
@@ -57,23 +70,101 @@ return {
 			},
 
 			-- Close all buffers except the current one.
-			{ "<leader>bo", "<cmd>BufferLineCloseOthers<CR>", desc = "Close other buffers" },
+            {
+                "<leader>bo",
+                function()
+                    require("helpers.buf-helper").close_others()
+                end,
+                desc = "Close other buffers"
+            },
 
 			-- Close buffers to the left/right of the current one.
-			{ "<leader>bL", "<cmd>BufferLineCloseRight<CR>", desc = "Close buffers to the right" },
-			{ "<leader>bH", "<cmd>BufferLineCloseLeft<CR>", desc = "Close buffers to the left" },
+            {
+                "<leader>bL",
+                function()
+                    require("helpers.buf-helper").close_direction(1)
+                end,
+                desc = "Close buffers to the right"
+            },
+            {
+                "<leader>bH",
+                function()
+                    require("helpers.buf-helper").close_direction(-1)
+                end,
+                desc = "Close buffers to the left"
+            },
 
 			-- Jump to buffer by ordinal position (first, second, third, etc.).
-			{ "<leader>b1", "<cmd>BufferLineGoToBuffer 1<CR>", desc = "Go to buffer 1" },
-			{ "<leader>b2", "<cmd>BufferLineGoToBuffer 2<CR>", desc = "Go to buffer 2" },
-			{ "<leader>b3", "<cmd>BufferLineGoToBuffer 3<CR>", desc = "Go to buffer 3" },
-			{ "<leader>b4", "<cmd>BufferLineGoToBuffer 4<CR>", desc = "Go to buffer 4" },
-			{ "<leader>b5", "<cmd>BufferLineGoToBuffer 5<CR>", desc = "Go to buffer 5" },
-			{ "<leader>b6", "<cmd>BufferLineGoToBuffer 6<CR>", desc = "Go to buffer 6" },
-			{ "<leader>b7", "<cmd>BufferLineGoToBuffer 7<CR>", desc = "Go to buffer 7" },
-			{ "<leader>b8", "<cmd>BufferLineGoToBuffer 8<CR>", desc = "Go to buffer 8" },
-			{ "<leader>b9", "<cmd>BufferLineGoToBuffer 9<CR>", desc = "Go to buffer 9" },
-			{ "<leader>b0", "<cmd>BufferLineGoToBuffer 10<CR>", desc = "Go to buffer 10" },
+			{
+                "<leader>b1",
+                function()
+                    require("helpers.buf-helper").go_to(1)
+                end,
+                desc = "Go to buffer 1"
+            },
+			{
+                "<leader>b2",
+                function()
+                    require("helpers.buf-helper").go_to(2)
+                end,
+                desc = "Go to buffer 2"
+            },
+			{
+                "<leader>b3",
+                function()
+                    require("helpers.buf-helper").go_to(3)
+                end,
+                desc = "Go to buffer 3"
+            },
+			{
+                "<leader>b4",
+                function()
+                    require("helpers.buf-helper").go_to(4)
+                end,
+                desc = "Go to buffer 4"
+            },
+			{
+                "<leader>b5",
+                function()
+                    require("helpers.buf-helper").go_to(5)
+                end,
+                desc = "Go to buffer 5"
+            },
+			{
+                "<leader>b6",
+                function()
+                    require("helpers.buf-helper").go_to(6)
+                end,
+                desc = "Go to buffer 6"
+            },
+			{
+                "<leader>b7",
+                function()
+                    require("helpers.buf-helper").go_to(7)
+                end,
+                desc = "Go to buffer 7"
+            },
+			{
+                "<leader>b8",
+                function()
+                    require("helpers.buf-helper").go_to(8)
+                end,
+                desc = "Go to buffer 8"
+            },
+			{
+                "<leader>b9",
+                function()
+                    require("helpers.buf-helper").go_to(9)
+                end,
+                desc = "Go to buffer 9"
+            },
+			{
+                "<leader>b0",
+                function()
+                    require("helpers.buf-helper").go_to(10)
+                end,
+                desc = "Go to buffer 10"
+            },
 		},
 
 		opts = {
