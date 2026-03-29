@@ -60,6 +60,7 @@ augroup("vim_reset_cursor", { clear = true })
 autocmd("VimLeave", {
 	group = "vim_reset_cursor",
 	callback = function()
+        -- TODO : Check if this does anything?
         require("helpers.gsty-helper").reset_cursor()
 	end,
 })

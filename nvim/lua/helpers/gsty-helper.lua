@@ -37,4 +37,11 @@ function M.set_user_var(name, value)
 	io.flush()
 end
 
+function M.reset_cursor()
+		vim.opt.guicursor = "a:ver25-blinkon0"
+		-- Send OSC 112 to reset cursor color to terminal default
+		io.write("\x1b]112\x07")
+		io.flush()
+end
+
 return M
