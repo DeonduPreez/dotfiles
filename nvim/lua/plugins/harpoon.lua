@@ -35,23 +35,28 @@ return {
 					sync_on_ui_close = true,
 
 					key = function()
-                  -- Read .git/HEAD to get the current branch of the repo.
-                  -- Falls back to cwd if not in a git repo.
-						local cwd = vim.uv.cwd() or ""
-						local head_file = cwd .. "/.git/HEAD"
-						local f = io.open(head_file, "r")
-						if not f then
-							return cwd
-						end
-						local content = f:read("*l") or ""
-						f:close()
-                  -- .git/HEAD looks like "ref: refs/heads/main"
-						local branch = content:match("ref: refs/heads/(.+)")
-						if branch then
-							return cwd .. "-" .. branch
-						end
+                        local cwd = vim.uv.cwd() or ""
+                        local branch = vim.b.gitsigns_head
 
-                  -- Detached HEAD or unusual state — just use cwd
+                        if branch and branch ~= "" then
+                            return cwd .. "-" .. branch
+                        end
+
+                        if not branch or branch == "" then
+                            -- Fallback: read .git/HEAD
+                            local f = io.open(cwd .. "/.git/HEAD", "r")
+                            if not f then
+                                return cwd
+                            end
+                            local content = f:read("*l") or ""
+                            f:close()
+                            branch = content:match("ref: refs/heads/(.+)") or "detached"
+                        end
+
+                        if branch and branch ~= "detached" then
+                            return cwd .. "-" .. branch
+                        end
+
 						return cwd
 					end,
 				},
