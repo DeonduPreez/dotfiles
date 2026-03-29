@@ -20,6 +20,9 @@ M.bool_pairs = {
 	["false"] = "true",
 	["1"] = "0",
 	["0"] = "1",
+    -- TODO : Debug + and -. It's turning a - into a 1?
+	-- ["+"] = "-",
+	-- ["-"] = "+",
 	["yes"] = "no",
 	["no"] = "yes",
 	["enable"] = "disable",
@@ -86,7 +89,9 @@ end
 function M.toggle_bool()
     -- TODO : Get the cursor index and place it back where it was as long as it's in the new word.
 
+    -- TODO : We should be doing yiw to get the word, not cword. cword seems to maybe get alphanumeric only? Like when on a - with a 1 after it, it returns the 1 when the cursor is on the -
 	local word = vim.fn.expand("<cword>")
+    -- print("word: " .. word)
 
 	-- We only act on recognised words; silently do nothing otherwise.
 	local lower = word:lower()
