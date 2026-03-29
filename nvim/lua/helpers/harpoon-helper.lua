@@ -1,11 +1,21 @@
 local M = {}
-M.harpoon = require("harpoon")
+
+M.harpoon = nil
 
 M._harpoon_cache = {}
 
 function M.rebuild_harpoon_cache()
     vim.notify("Rebuilding harpoon cache")
     M._harpoon_cache = {}
+
+    if not M.harpoon then
+        local ok, harpoon = pcall(require, "harpoon")
+        if not ok then
+            return
+        end
+
+        M.harpoon = harpoon
+    end
 
     local list = M.harpoon:list()
     for i, item in pairs(list.items) do
