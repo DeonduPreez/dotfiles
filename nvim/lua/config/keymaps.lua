@@ -227,6 +227,3 @@ map("n", "<leader>b0", function() buf.go_to(10) end, { desc = "Go to buffer 10" 
 
 -- ── [Phase 8] Notifications (<leader>n) ─────────────────────
 -- (noice / snacks notification keymaps will go here)
-
--- ── [Phase 8] Notifications (<leader>n) ─────────────────────
--- (noice / snacks notification keymaps will go here)
