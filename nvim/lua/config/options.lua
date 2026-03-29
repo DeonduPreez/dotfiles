@@ -101,6 +101,32 @@ vim.diagnostic.config({
 	},
 })
 
+-- ── Cursor — Mode-Reactive Colors ────────────────────────────
+-- Each mode gets its own highlight group so the cursor color changes
+-- on mode switch. Ghostty respects Neovim's OSC 12 cursor color
+-- escape sequences. If the cursor color doesn't change, add
+-- `cursor-invert-fg-bg = false` to your Ghostty config.
+--
+-- The bg of each highlight = the cursor block color for that mode.
+-- These colors match the mode_color_map in heirline.lua.
+vim.api.nvim_set_hl(0, "HpCursorNormal",  { bg = "#7E9CD8" })  -- crystalBlue
+vim.api.nvim_set_hl(0, "HpCursorInsert",  { bg = "#98BB6C" })  -- springGreen
+vim.api.nvim_set_hl(0, "HpCursorVisual",  { bg = "#957FB8" })  -- oniViolet
+vim.api.nvim_set_hl(0, "HpCursorReplace", { bg = "#FF5D62" })  -- peachRed
+vim.api.nvim_set_hl(0, "HpCursorCommand", { bg = "#7AA89F" })  -- waveAqua2
+
+-- guicursor format: mode-list:shape-HlGroup/lCursor
+-- Shapes: block, ver25 (25% vertical bar), hor20 (20% horizontal bar)
+-- The /lCursor part is the "languagemap cursor" fallback.
+vim.opt.guicursor = table.concat({
+	"n-c:block-HpCursorNormal/lCursor",     -- Normal + Command: blue block
+	"i-ci-ve:ver25-HpCursorInsert/lCursor",  -- Insert: green vertical bar
+	"v:block-HpCursorVisual/lCursor",         -- Visual (all sub-modes): purple block
+	"r-cr:hor20-HpCursorReplace/lCursor",     -- Replace + cmdline-replace: red horizontal bar
+    "o:hor50-HpCursorNormal/lCursor",        -- Operator-pending: blue half bar
+	"a:blinkwait700-blinkoff400-blinkon250",  -- All modes: subtle blink
+}, ",")
+
 -- ── Fill Characters ──────────────────────────────────────────
 -- Cleaner look for folds and end-of-buffer (no ~ tildes).
 -- vim.opt.fillchars = {

@@ -39,7 +39,7 @@ autocmd("BufEnter", {
     end
 })
 
--- ── Restore Cursor Position ──────────────────────────────────
+-- ── Cursor Management ──────────────────────────────────
 -- When re-opening a file, jump back to where you were last time.
 -- Neovim stores this in the ShaDa file (like viminfo).
 augroup("restore_cursor", { clear = true })
@@ -51,6 +51,16 @@ autocmd("BufReadPost", {
 		if mark[1] > 0 and mark[1] <= line_count then
 			pcall(vim.api.nvim_win_set_cursor, 0, mark)
 		end
+	end,
+})
+
+-- Restore default cursor when leaving Neovim so the terminal
+-- isn't stuck with our custom cursor shape/color.
+augroup("vim_reset_cursor", { clear = true }) 
+autocmd("VimLeave", {
+	group = "vim_reset_cursor",
+	callback = function()
+        require("helpers.gsty-helper").reset_cursor()
 	end,
 })
 

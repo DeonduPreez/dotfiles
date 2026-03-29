@@ -11,6 +11,9 @@ keybind = ctrl+shift+c=unbind
 keybind = ctrl+shift+v=unbind
 keybind = ctrl+shift+,=unbind
 
+
+cursor-invert-fg-bg = false
+
 # TODO : Check these out and see which are needed
 # cursor-style = block
 # shell-integration-features = no-cursor
