@@ -26,6 +26,7 @@
 -- TODO : In Neo-tree, when renaming, if the file exists in git, do a git move. Look at other git commands that happen in Rider from the Explorer UI.
 
 local map = vim.keymap.set
+local buf = require("helpers.buf-helper")
 
 -- ═══════════════════════════════════════════════════════════════
 -- GENERAL (non-plugin)
@@ -35,9 +36,6 @@ map("i", "<C-v>", "<C-o><leader>p", { desc = "Paste without overwriting register
 -- Paste over selection without yanking.
 -- TODO : We need a better way to do this, <leader>D is not intuitive.
 map("x", "<leader>p", [["_dP]], { desc = "Paste without overwriting register" })
-
--- ── Home / End (<C-Home> / <C-End>) ────────────────────────────
-map("n", "<leader>wv", "<C-w>v", { desc = "Split vertical" })
 
 -- ── Insert mode editing shortcuts ────────────────────────────
 map("i", "<C-BS>", "<C-w>", { desc = "Delete word backward" })
@@ -109,12 +107,45 @@ map("n", "<C-S-o>", function()
 	wsl.open_in_explorer()
 end, { desc = "Open in file explorer" })
 
--- ── Saving (<C-s> / <C-S-s>) ─────────────────────────────
-map("n", "<C-s>", "<cmd>w<CR>", {desc = "Save file"})
-map("n", "<C-S-s>", "<cmd>wa<CR>", {desc = "Save all open files"})
+-- ── Saving (<C-s> / <C-S-s>) ────────────────────────────────
+map("n", "<C-s>", "<cmd>w<CR>", { desc = "Save file" })
+map("n", "<C-S-s>", "<cmd>wa<CR>", { desc = "Save all open files" })
+map({ "i", "v" }, "<C-s>", "<Esc><cmd>w<CR>", { desc = "Save file" })
+map({ "i", "v" }, "<C-S-s>", "<Esc><cmd>wa<CR>", { desc = "Save all open files" })
 
-map({ "i", "v" }, "<C-s>", "<Esc><cmd>w<CR>", {desc = "Save file"})
-map({ "i", "v" }, "<C-S-s>", "<Esc><cmd>wa<CR>", {desc = "Save all open files"})
+-- ═══════════════════════════════════════════════════════════════
+-- BUFFER KEYMAPS (using buf-helper, matches heirline tabline)
+-- ═══════════════════════════════════════════════════════════════
+-- These use buf-helper.lua functions that operate on the same
+-- ordered buffer list that heirline's tabline displays.
+-- This ensures ordinal positions match visual tab positions.
+
+-- Cycle through buffers (like Ctrl+Tab in a browser / Rider).
+map("n", "<S-h>", function() buf.prev() end, { desc = "Prev buffer" })
+map("n", "<S-l>", function() buf.next() end, { desc = "Next buffer" })
+
+-- Close the current buffer safely (doesn't quit Neovim).
+map("n", "<leader>bd", function() buf.delete() end, { desc = "Delete buffer" })
+map("n", "<leader>bD", function() buf.force_delete() end, { desc = "Force delete buffer" })
+
+-- Close all buffers except the current one.
+map("n", "<leader>bo", function() buf.close_others() end, { desc = "Close other buffers" })
+
+-- Close buffers to the left/right of the current one.
+map("n", "<leader>bH", function() buf.close_direction("left") end, { desc = "Close buffers to the left" })
+map("n", "<leader>bL", function() buf.close_direction("right") end, { desc = "Close buffers to the right" })
+
+-- Jump to buffer by ordinal position (matches heirline tab numbers).
+map("n", "<leader>b1", function() buf.go_to(1) end, { desc = "Go to buffer 1" })
+map("n", "<leader>b2", function() buf.go_to(2) end, { desc = "Go to buffer 2" })
+map("n", "<leader>b3", function() buf.go_to(3) end, { desc = "Go to buffer 3" })
+map("n", "<leader>b4", function() buf.go_to(4) end, { desc = "Go to buffer 4" })
+map("n", "<leader>b5", function() buf.go_to(5) end, { desc = "Go to buffer 5" })
+map("n", "<leader>b6", function() buf.go_to(6) end, { desc = "Go to buffer 6" })
+map("n", "<leader>b7", function() buf.go_to(7) end, { desc = "Go to buffer 7" })
+map("n", "<leader>b8", function() buf.go_to(8) end, { desc = "Go to buffer 8" })
+map("n", "<leader>b9", function() buf.go_to(9) end, { desc = "Go to buffer 9" })
+map("n", "<leader>b0", function() buf.go_to(10) end, { desc = "Go to buffer 10" })
 
 -- ═══════════════════════════════════════════════════════════════
 -- PLUGIN KEYMAPS REFERENCE
@@ -145,11 +176,36 @@ map({ "i", "v" }, "<C-S-s>", "<Esc><cmd>wa<CR>", {desc = "Save all open files"})
 -- <C-f>         → Scroll forward in LSP hover / signature (noice, i / n / s modes)
 -- <C-b>         → Scroll backward in LSP hover / signature (noice, i / n / s modes)
 
--- ── [Phase 3] Find / Search (<leader>f) ───────────────────────
--- (telescope keymaps will go here)
+-- ── [Phase 3] Find / Search (<leader>f) — plugins/navigation.lua ──
+-- <leader><space>  → Find files
+-- <leader>fr       → Recent files
+-- <leader>/        → Live grep (project)
+-- <leader>fw       → Grep word under cursor
+-- <leader>fb       → Find buffers
+-- <leader>fh       → Help tags
+-- <leader>fk       → Keymaps
+-- <leader>fc       → Command history
+-- <leader>fd       → Diagnostics
+-- <leader>f.       → Resume last picker
+-- <leader>fg       → Fuzzy search in buffer
+-- <leader>fH       → Find: harpoon marks
 
--- ── [Phase 3] Explorer (<leader>e) ──────────────────────────
--- (neo-tree keymaps will go here)
+-- ── [Phase 3] Explorer (<leader>e) — plugins/neo-tree.lua ───
+-- <leader>e     → Toggle Explorer
+-- <leader>o     → Focus Explorer
+
+-- ── [Phase 3] Sessions (<leader>q) — plugins/navigation.lua ─
+-- <leader>qs    → Search sessions
+-- <leader>qS    → Save session
+-- <leader>qd    → Toggle session auto-save
+-- <leader>qD    → Delete current session
+
+-- ── Harpoon — plugins/harpoon.lua ───────────────────────────
+-- <leader>H     → Toggle harpoon mark on current file
+-- <leader>hm    → Harpoon quick menu
+-- <leader>hp    → Harpoon previous file
+-- <leader>hn    → Harpoon next file
+-- g1-g9         → Jump to harpoon file 1-9
 
 -- ── [Phase 4] Search / Replace (<leader>s) ────────────────────
 -- (grug-far keymaps will go here)
@@ -168,6 +224,9 @@ map({ "i", "v" }, "<C-S-s>", "<Esc><cmd>wa<CR>", {desc = "Save all open files"})
 
 -- ── [Phase 8] Diagnostics / Quickfix (<leader>x) ─────────────
 -- (diagnostic keymaps will go here)
+
+-- ── [Phase 8] Notifications (<leader>n) ─────────────────────
+-- (noice / snacks notification keymaps will go here)
 
 -- ── [Phase 8] Notifications (<leader>n) ─────────────────────
 -- (noice / snacks notification keymaps will go here)
