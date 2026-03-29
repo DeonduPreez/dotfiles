@@ -39,6 +39,8 @@ vim.opt.scrolloff = 8 -- keep 8 lines visible above/below cursor when scrolling
 vim.opt.sidescrolloff = 8 -- keep 8 columns visible left/right of cursor
 vim.opt.colorcolumn = "120" -- visual guide at column 120 (common .NET line length)
 vim.opt.showmode = false -- hide "-- INSERT --" etc (lualine will show mode)
+vim.opt.laststatus = 3
+vim.opt.showtabline = 2
 
 -- ── Splits ───────────────────────────────────────────────────
 -- New splits open to the right/below, matching the JetBrains default.
