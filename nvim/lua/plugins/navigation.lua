@@ -451,12 +451,11 @@ return {
 				"Neotree show",
 				function()
 					local session_name = require("auto-session.lib").current_session_name(true)
-					vim.g.sess_name = session_name
-					if not session_name then
-						session_name = "Unknown"
-					end
+                    if not session_name then
+                        return
+                    end
 
-					require("helpers.wztrm-helper").set_terminal_title(session_name)
+					vim.g.sess_name = session_name
 				end,
                 function()
                     require("helpers.harpoon-helper").rebuild_harpoon_cache()

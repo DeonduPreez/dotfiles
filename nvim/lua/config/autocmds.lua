@@ -24,6 +24,21 @@ autocmd("TextYankPost", {
 	end,
 })
 
+
+augroup("set_terminal_title", { clear = true })
+autocmd("BufEnter", {
+    group = "set_terminal_title",
+    callback = function(event)
+        if not event.file or event.file == "" then
+            return
+        end
+
+        local sess_name = vim.g.sess_name and vim.g.sess_name or ""
+        local title = sess_name .. " " .. event.file
+        require("helpers.gsty-helper").set_terminal_title(title)
+    end
+})
+
 -- ── Restore Cursor Position ──────────────────────────────────
 -- When re-opening a file, jump back to where you were last time.
 -- Neovim stores this in the ShaDa file (like viminfo).
