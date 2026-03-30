@@ -38,7 +38,7 @@ vim.opt.wrap = false -- don't wrap long lines (code readability)
 vim.opt.scrolloff = 8 -- keep 8 lines visible above/below cursor when scrolling
 vim.opt.sidescrolloff = 8 -- keep 8 columns visible left/right of cursor
 vim.opt.colorcolumn = "120" -- visual guide at column 120 (common .NET line length)
-vim.opt.showmode = false -- hide "-- INSERT --" etc (lualine will show mode)
+vim.opt.showmode = false -- hide "-- INSERT --" etc status bar shows mode
 vim.opt.laststatus = 3
 vim.opt.showtabline = 2
 
@@ -72,6 +72,24 @@ vim.opt.conceallevel = 0 -- show text normally (no concealing in markdown etc.)
 -- install win32yank.exe on the Windows PATH and it will be found
 -- from WSL automatically.
 vim.opt.clipboard = "unnamedplus"
+if vim.fn.has("wsl") == 1 then
+    local win32yank = "win32yank.exe"
+    if vim.fn.getftype(vim.fn.exepath(win32yank)) == "link" then
+        win32yank = vim.fn.resolve(vim.fn.exepath(win32yank))
+    end
+    vim.g.clipboard = {
+        name = "win32yank",
+        copy = {
+            ["+"] = { win32yank, "-i", "--crlf" },
+            ["*"] = { win32yank, "-i", "--crlf" },
+        },
+        paste = {
+            ["+"] = { win32yank, "-o", "--lf" },
+            ["*"] = { win32yank, "-o", "--lf" },
+        },
+        cache_enabled = 1, -- cache fixes del lag
+    }
+end
 
 -- ── Floating Window Borders ──────────────────────────────────────────
 -- New in Neovim 0.11: sets the default border style for ALL floating
