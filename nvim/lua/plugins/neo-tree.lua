@@ -249,6 +249,7 @@ return {
 	-- └────────────────────────────────────────────────────────────────┘
 	{
 		"antosha417/nvim-lsp-file-operations",
+        event = "LspAttach", -- Only loads when LspAttach fires
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"nvim-neo-tree/neo-tree.nvim", -- makes sure that this loads after Neo-tree.
