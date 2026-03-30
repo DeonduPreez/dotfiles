@@ -499,7 +499,7 @@ return {
 			--- post_cwd_changed_cmds? (string|fun())[] executes after cwd is changed if cwd_change_handling is true
 			post_cwd_changed_cmds = {
 				function()
-					require("lualine").refresh() -- example refreshing the lualine status line _after_ the cwd changes
+					vim.cmd("redrawstatus")
 				end,
 			},
 			--- save_extra_cmds? (string|fun(session_name:string): string|table|nil)[] executes to get extra data to save with the session
