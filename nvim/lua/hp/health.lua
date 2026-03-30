@@ -467,8 +467,6 @@ local function check_plugins()
 		"which-key.nvim",
 		"mini.icons",
 		"nvim-web-devicons",
-		"lualine.nvim",
-		"bufferline.nvim",
 		"noice.nvim",
 	}
 

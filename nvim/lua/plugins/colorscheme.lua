@@ -85,9 +85,7 @@ return {
 					LineNr = { fg = colors.palette.fujiGray, bg = "NONE" },
 					CursorLineNr = { bg = colors.palette.sumiInk3 },
 
-					-- Status line: give it a subtle background so it's distinct
-					-- from the editor area. This will be replaced by lualine in
-					-- Phase 2 but keeps things clean until then.
+					-- Status line: give it a subtle background so it's distinct from the editor area.
 					StatusLine = { bg = colors.palette.sumiInk2 },
 					StatusLineNC = { bg = colors.palette.sumiInk1 },
 

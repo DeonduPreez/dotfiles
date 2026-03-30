@@ -84,7 +84,7 @@ return {
 		"echasnovski/mini.icons",
 
 		-- Load lazily — mini.icons is called on-demand by other plugins
-		-- (which-key, neo-tree, telescope, lualine, bufferline, etc.)
+		-- (which-key, neo-tree, telescope, etc.)
 		-- through the mock_nvim_web_devicons integration.
 		lazy = true,
 
